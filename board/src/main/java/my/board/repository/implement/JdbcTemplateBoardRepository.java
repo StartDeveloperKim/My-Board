@@ -27,11 +27,16 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     private String selectBoard_sql = "SELECT * FROM BOARD";
     private String selectById_sql = "SELECT * FROM BOARD WHERE ID = ?";
     private String insertBoard = "INSERT INTO BOARD (ID, TITLE, CONTENT, NICKNAME) VALUES (board_seq.nextval, ?, ?, ?)";
-
+    private String selectTenBoard_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM BOARD ORDER BY REGDATE DESC) TB) B WHERE RN BETWEEN 1 AND 10";
 
     @Override
     public List<Board> selectBoard() {
         return jdbcTemplate.query(selectBoard_sql, rowMapper);
+    }
+
+    @Override
+    public List<Board> selectBoardTen() {
+        return jdbcTemplate.query(selectTenBoard_sql, rowMapper);
     }
 
     @Override

@@ -20,6 +20,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public List<Board> getBoardListTen() {
+        return boardRepository.selectBoardTen();
+    }
+
+    @Override
     public Board getBoardById(int id) {
         return boardRepository.selectById(id);
     }

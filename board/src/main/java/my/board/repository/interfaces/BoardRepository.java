@@ -15,6 +15,9 @@ public interface BoardRepository {
     /*리스트로 보여주기*/
     public List<Board> selectBoard();
 
+    /*글 리스트 10개 가져오기 최신순으로*/
+    public List<Board> selectBoardTen();
+
     /*상세 보여주기*/
     public Board selectById(int id);
 

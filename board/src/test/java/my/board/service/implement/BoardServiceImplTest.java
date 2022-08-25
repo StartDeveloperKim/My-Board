@@ -37,4 +37,13 @@ class BoardServiceImplTest {
             System.out.println("board = " + board.toString());
         }
     }
+
+    @Test
+    @DisplayName("글 10개 가져오기 테스트")
+    void getBoardListTenTest(){
+        List<Board> boardListTen = boardService.getBoardListTen();
+        for (Board board : boardListTen) {
+            System.out.println("board = " + board.toString());
+        }
+    }
 }

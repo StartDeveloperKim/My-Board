@@ -14,6 +14,12 @@ import java.util.List;
 public interface BoardService {
 
     public List<Board> getBoardList();
+    
+    /*2022-08-25 아이디어
+    * 클라이언트쪽에서 설정을 할 수 있도록 하자 3, 5, 10개
+    * 일단은 10개 가져오기
+    * */
+    public List<Board> getBoardListTen();
 
     public Board getBoardById(int id);
 
