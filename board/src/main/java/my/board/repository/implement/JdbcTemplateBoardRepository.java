@@ -23,7 +23,8 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     public JdbcTemplateBoardRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
+    
+    /*쿼리 문*/
     private String selectBoard_sql = "SELECT * FROM BOARD";
     private String selectById_sql = "SELECT * FROM BOARD WHERE ID = ?";
     private String insertBoard = "INSERT INTO BOARD (ID, TITLE, CONTENT, NICKNAME) VALUES (board_seq.nextval, ?, ?, ?)";
