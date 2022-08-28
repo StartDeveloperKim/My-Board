@@ -2,6 +2,7 @@ package my.board.service.interfaces;
 
 import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
+import my.board.domain.Criteria;
 
 import java.util.List;
 
@@ -14,7 +15,9 @@ import java.util.List;
 * */
 public interface BoardService {
 
-    public List<Board> getBoardList();
+    public List<Board> getBoardList(Criteria cri);
+
+    public int getTotal();
     
     /*2022-08-25 아이디어
     * 클라이언트쪽에서 설정을 할 수 있도록 하자 3, 5, 10개

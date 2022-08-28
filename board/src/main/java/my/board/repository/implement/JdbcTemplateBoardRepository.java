@@ -3,6 +3,7 @@ package my.board.repository.implement;
 import lombok.extern.slf4j.Slf4j;
 import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
+import my.board.domain.Criteria;
 import my.board.repository.interfaces.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,21 +25,23 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     public JdbcTemplateBoardRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    
+
     /*쿼리 문*/
-    private String selectBoard_sql = "SELECT * FROM BOARD";
+    private String selectBoardWithPaging_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM BOARD ORDER BY REGDATE DESC) TB WHERE ROWNUM <= ?) B WHERE RN > ?";
     private String selectById_sql = "SELECT * FROM BOARD WHERE ID = ?";
     private String insertBoard = "INSERT INTO BOARD (ID, TITLE, CONTENT, NICKNAME) VALUES (board_seq.nextval, ?, ?, ?)";
-    private String selectTenBoard_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM BOARD ORDER BY REGDATE DESC) TB) B WHERE RN BETWEEN 1 AND 10";
+    private String selectTenBoard_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM BOARD ORDER BY REGDATE DESC) TB) B WHERE RN BETWEEN ? AND ?";
+    private String getCount_sql = "SELECT COUNT(*) FROM BOARD";
 
     @Override
-    public List<Board> selectBoard() {
-        return jdbcTemplate.query(selectBoard_sql, rowMapper);
+    public List<Board> selectBoard(Criteria cri) {
+        return jdbcTemplate.query(selectBoardWithPaging_sql, rowMapper, cri.getPageNum() * cri.getAmount(), (cri.getPageNum() - 1) * cri.getAmount());
     }
 
+    /*시작페이지에서 글 10개 보기*/
     @Override
     public List<Board> selectBoardTen() {
-        return jdbcTemplate.query(selectTenBoard_sql, rowMapper);
+        return jdbcTemplate.query(selectTenBoard_sql, rowMapper, 1, 10);
     }
 
     @Override
@@ -60,6 +63,17 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     @Override
     public void deleteBoard(int id) {
 
+    }
+
+    @Override
+    public int getTotal() {
+        Integer result = jdbcTemplate.queryForObject(getCount_sql, new RowMapper<Integer>() {
+            @Override
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getInt(1);
+            }
+        });
+        return result;
     }
 
     private RowMapper<Board> rowMapper = new RowMapper<Board>() {

@@ -35,6 +35,7 @@
             <th>글 번호</th>
             <th>제목</th>
             <th>닉네임</th>
+            <th>조회수</th>
             <th>등록날짜</th>
             <th>수정날짜</th>
         </tr>
@@ -45,6 +46,7 @@
                 <td>${board.id}</td>
                 <td>${board.title}</td>
                 <td>${board.nickname}</td>
+                <td>${board.hit}</td>
                 <td>${board.regdate}</td>
                 <c:if test="${board.updatedate == null}">
                     <td>-</td>
@@ -60,6 +62,24 @@
     <div >
         <button type="button" class="btn btn-outline-primary"
                 onclick="location.href='/board/new'">글 등록</button>
+    </div>
+
+    <div class="container pt-3 pull-rights">
+        <div class="pull-right">
+            <ul class="pagination">
+                <c:if test="${pageMaker.prev}">
+                    <li class="page-item"><a class="page-link" href="#">이전</a></li>
+                </c:if>
+
+                <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                    <li class="page-item"><a class="page-link" href="#">${num}</a></li>
+                </c:forEach>
+
+                <c:if test="${pageMaker.next}">
+                    <li class="page-item"><a class="page-link" href="#">다음</a></li>
+                </c:if>
+            </ul>
+        </div>
     </div>
 </div>
 

@@ -3,6 +3,7 @@ package my.board.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.board.domain.BoardRegisterDTO;
+import my.board.domain.Criteria;
 import my.board.service.interfaces.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +21,9 @@ public class BoardController {
      * URL(GET) : /board
      * */
     @GetMapping
-    public String getBoardList(Model model) {
-        model.addAttribute("list", boardService.getBoardList());
-        log.info("/board");
+    public String getBoardList(Criteria cri,  Model model) {
+        model.addAttribute("list", boardService.getBoardList(cri));
+        log.info("/board -> cri = {}", cri.toString());
         return "board/list";
     }
 

@@ -34,6 +34,7 @@
       <th>글 번호</th>
       <th>제목</th>
       <th>닉네임</th>
+      <th>조회수</th>
       <th>등록날짜</th>
       <th>수정날짜</th>
     </tr>
@@ -44,6 +45,7 @@
         <td>${board.id}</td>
         <td>${board.title}</td>
         <td>${board.nickname}</td>
+        <td>${board.hit}</td>
         <td>${board.regdate}</td>
         <c:if test="${board.updatedate == null}">
           <td>-</td>

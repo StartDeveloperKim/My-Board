@@ -3,6 +3,7 @@ package my.board.service.implement;
 import lombok.RequiredArgsConstructor;
 import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
+import my.board.domain.Criteria;
 import my.board.repository.interfaces.BoardRepository;
 import my.board.service.interfaces.BoardService;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,12 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
 
     @Override
-    public List<Board> getBoardList() {
-        return boardRepository.selectBoard();
+    public List<Board> getBoardList(Criteria cri) {
+        return boardRepository.selectBoard(cri);
+    }
+
+    public int getTotal() {
+        return boardRepository.getTotal();
     }
 
     @Override

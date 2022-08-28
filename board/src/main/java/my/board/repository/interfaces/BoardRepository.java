@@ -2,6 +2,7 @@ package my.board.repository.interfaces;
 
 import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
+import my.board.domain.Criteria;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface BoardRepository {
 
     /*리스트로 보여주기*/
-    public List<Board> selectBoard();
+    public List<Board> selectBoard(Criteria cri);
 
     /*글 리스트 10개 가져오기 최신순으로*/
     public List<Board> selectBoardTen();
@@ -31,5 +32,5 @@ public interface BoardRepository {
     /*글 삭제*/
     public void deleteBoard(int id);
 
-
+    public int getTotal();
 }
