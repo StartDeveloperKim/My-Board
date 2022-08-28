@@ -1,7 +1,8 @@
 package my.board.controller;
 
 import lombok.RequiredArgsConstructor;
-import my.board.domain.Board;
+import lombok.extern.slf4j.Slf4j;
+import my.board.domain.BoardRegisterDTO;
 import my.board.service.interfaces.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/board")
 public class BoardController {
 
@@ -20,6 +22,7 @@ public class BoardController {
     @GetMapping
     public String getBoardList(Model model) {
         model.addAttribute("list", boardService.getBoardList());
+        log.info("/board");
         return "board/list";
     }
 
@@ -29,6 +32,7 @@ public class BoardController {
     @GetMapping("/{id}")
     public String getBoard(@PathVariable int id, Model model) {
         model.addAttribute("board", boardService.getBoardById(id));
+        log.info("/board/{}", id);
         return "board/detail";
     }
 
@@ -48,9 +52,10 @@ public class BoardController {
      * URL(POST) : /board/new
      * */
     @PostMapping("/new")
-    public String postBoard(@ModelAttribute Board board) {
-        boardService.insertBoard(board);
-        return "redirect:board";
+    public String postBoard(@ModelAttribute BoardRegisterDTO registerDTO) {
+        boardService.insertBoard(registerDTO);
+        log.info("/board/new --> POST, BoardRegisterDTO : {}", registerDTO.toString());
+        return "redirect:/board";
     }
 
     /*글 수정 폼

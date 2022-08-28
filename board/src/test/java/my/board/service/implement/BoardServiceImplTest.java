@@ -1,6 +1,7 @@
 package my.board.service.implement;
 
 import my.board.domain.Board;
+import my.board.domain.BoardRegisterDTO;
 import my.board.repository.interfaces.BoardRepository;
 import my.board.service.interfaces.BoardService;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +23,7 @@ class BoardServiceImplTest {
     @Test
     @DisplayName("글 등록 및 가져오기 테스트")
     void BoardRegisterTest() {
-        Board board = new Board("세번쨰 글입니다.", "하하", "틔우");
+        BoardRegisterDTO board = new BoardRegisterDTO("세번쨰 글입니다.", "하하", "틔우");
         boardService.insertBoard(board);
 
         Board boardById = boardService.getBoardById(3);

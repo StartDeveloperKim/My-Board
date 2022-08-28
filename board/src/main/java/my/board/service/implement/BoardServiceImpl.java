@@ -2,6 +2,7 @@ package my.board.service.implement;
 
 import lombok.RequiredArgsConstructor;
 import my.board.domain.Board;
+import my.board.domain.BoardRegisterDTO;
 import my.board.repository.interfaces.BoardRepository;
 import my.board.service.interfaces.BoardService;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void insertBoard(Board board) {
-        boardRepository.insertBoard(board);
+    public void insertBoard(BoardRegisterDTO registerDTO) {
+        boardRepository.insertBoard(registerDTO);
     }
 
     @Override

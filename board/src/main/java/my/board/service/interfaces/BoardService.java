@@ -1,6 +1,7 @@
 package my.board.service.interfaces;
 
 import my.board.domain.Board;
+import my.board.domain.BoardRegisterDTO;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface BoardService {
 
     public Board getBoardById(int id);
 
-    public void insertBoard(Board board);
+    public void insertBoard(BoardRegisterDTO registerDTO);
 
     public void updateBoard(Board board);
 

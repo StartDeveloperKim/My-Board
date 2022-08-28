@@ -2,6 +2,7 @@ package my.board.repository.implement;
 
 import lombok.extern.slf4j.Slf4j;
 import my.board.domain.Board;
+import my.board.domain.BoardRegisterDTO;
 import my.board.repository.interfaces.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,8 +48,8 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     }
 
     @Override
-    public void insertBoard(Board board) {
-        jdbcTemplate.update(insertBoard, board.getTitle(), board.getContent(), board.getNickname());
+    public void insertBoard(BoardRegisterDTO registerDTO) {
+        jdbcTemplate.update(insertBoard, registerDTO.getTitle(), registerDTO.getContent(), registerDTO.getNickname());
     }
 
     @Override

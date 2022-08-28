@@ -1,6 +1,7 @@
 package my.board.repository.interfaces;
 
 import my.board.domain.Board;
+import my.board.domain.BoardRegisterDTO;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface BoardRepository {
     public Board selectById(int id);
 
     /*글 등록*/
-    public void insertBoard(Board board);
+    public void insertBoard(BoardRegisterDTO registerDTO);
 
     /*글 수정*/
     public void updateBoard(Board board);
