@@ -27,7 +27,7 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     }
 
     /*쿼리 문*/
-    private String selectBoardWithPaging_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM BOARD ORDER BY REGDATE DESC) TB WHERE ROWNUM <= ?) B WHERE RN > ?";
+    private String selectBoardWithPaging_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM BOARD ORDER BY REGDATE DESC) TB) B WHERE RN BETWEEN ? AND ?";
     private String selectById_sql = "SELECT * FROM BOARD WHERE ID = ?";
     private String insertBoard = "INSERT INTO BOARD (ID, TITLE, CONTENT, NICKNAME) VALUES (board_seq.nextval, ?, ?, ?)";
     private String selectTenBoard_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM BOARD ORDER BY REGDATE DESC) TB) B WHERE RN BETWEEN ? AND ?";
@@ -35,8 +35,13 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
 
     @Override
     public List<Board> selectBoard(Criteria cri) {
-        return jdbcTemplate.query(selectBoardWithPaging_sql, rowMapper, cri.getPageNum() * cri.getAmount(), (cri.getPageNum() - 1) * cri.getAmount());
+        log.info("selectBoard -> PageNum:{}, amount:{}", cri.getPageNum(), cri.getAmount());
+        return jdbcTemplate.query(selectBoardWithPaging_sql, rowMapper, (((cri.getPageNum()-1) * cri.getAmount()) + 1), cri.getPageNum() * cri.getAmount());
     }
+    /*
+    * pageNum=1, amount=10 or pageNum=2, amount=10
+    * pageNum*amount
+    * */
 
     /*시작페이지에서 글 10개 보기*/
     @Override

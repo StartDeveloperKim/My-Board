@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class Page {
 
-    private int startPage;
-    private int endPage;
-    private boolean prev, next;
+    private int startPage; // 시작페이지
+    private int endPage; // 끝 페에지
+    private boolean prev, next; // 다음과 이전이 있는지 판단
 
     private int total;
     private Criteria cri;

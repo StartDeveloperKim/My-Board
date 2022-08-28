@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
+import my.board.domain.Page;
 import my.board.service.interfaces.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ public class BoardController {
     @GetMapping
     public String getBoardList(Criteria cri,  Model model) {
         model.addAttribute("list", boardService.getBoardList(cri));
+        model.addAttribute("pageMaker", new Page(cri, boardService.getTotal()));
         log.info("/board -> cri = {}", cri.toString());
         return "board/list";
     }

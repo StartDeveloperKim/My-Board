@@ -68,15 +68,20 @@
         <div class="pull-right">
             <ul class="pagination">
                 <c:if test="${pageMaker.prev}">
-                    <li class="page-item"><a class="page-link" href="#">이전</a></li>
+                    <li class="page-item"><a class="page-link" href="/board?pageNum=${pageMaker.cri.pageNum-1}&amount=${pageMaker.cri.amount}">이전</a></li>
                 </c:if>
 
                 <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-                    <li class="page-item"><a class="page-link" href="#">${num}</a></li>
+                    <c:if test="${num==pageMaker.cri.pageNum}">
+                        <li class="page-item active"><a class="page-link" href="/board?pageNum=${num}&amount=${pageMaker.cri.amount}">${num}</a></li>
+                    </c:if>
+                    <c:if test="${num!=pageMaker.cri.pageNum}">
+                        <li class="page-item"><a class="page-link" href="/board?pageNum=${num}&amount=${pageMaker.cri.amount}">${num}</a></li>
+                    </c:if>
                 </c:forEach>
 
                 <c:if test="${pageMaker.next}">
-                    <li class="page-item"><a class="page-link" href="#">다음</a></li>
+                    <li class="page-item"><a class="page-link" href="/board?pageNum=${pageMaker.cri.pageNum+1}&amount=${pageMaker.cri.amount}">다음</a></li>
                 </c:if>
             </ul>
         </div>

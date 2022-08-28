@@ -55,4 +55,14 @@ class BoardServiceImplTest {
         int total = boardService.getTotal();
         System.out.println("total = " + total);
     }
+
+    @Test
+    @DisplayName("페에징 테스트")
+    void pagingTest(){
+        List<Board> boardList = boardService.getBoardList(new Criteria());
+
+        for (Board board : boardList) {
+            System.out.println("board = " + board.toString());
+        }
+    }
 }
