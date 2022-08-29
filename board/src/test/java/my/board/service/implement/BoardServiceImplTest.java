@@ -58,7 +58,7 @@ class BoardServiceImplTest {
 
     @Test
     @DisplayName("페에징 테스트")
-    void pagingTest(){
+    void pagingTest() {
         List<Board> boardList = boardService.getBoardList(new Criteria());
 
         for (Board board : boardList) {

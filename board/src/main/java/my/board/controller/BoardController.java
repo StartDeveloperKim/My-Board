@@ -2,6 +2,7 @@ package my.board.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
 import my.board.domain.Page;
@@ -9,6 +10,7 @@ import my.board.service.interfaces.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,7 +37,8 @@ public class BoardController {
     @GetMapping("/{id}")
     public String getBoard(@PathVariable int id, Model model) {
         model.addAttribute("board", boardService.getBoardById(id));
-        log.info("/board/{}", id);
+        //log.info("/board/{}, pageNum={}, amount={}", id, pageNum, amount);
+
         return "board/detail";
     }
 
@@ -66,6 +69,8 @@ public class BoardController {
      * */
     @GetMapping("/{id}/edit")
     public String updateBoard_form(@PathVariable int id, Model model) {
+        log.info("id={}", id);
+
         model.addAttribute("board", boardService.getBoardById(id));
         return "board/edit";
     }
@@ -75,17 +80,23 @@ public class BoardController {
      * 수정버튼 누르면 detail page로 redirect
      * */
     @PostMapping("/{id}/edit")
-    public String updateBoard(@PathVariable int id, Model model) {
-        model.addAttribute("board", boardService.getBoardById(id));
-        return "redirect:board/{id}";
+    public String updateBoard(@PathVariable int id, Criteria cri, Board board) {
+        log.info("updateBoard = {}", board.toString());
+        log.info("Criteria : {}, {}", cri.getPageNum(), cri.getAmount());
+
+        //log.info("pageNum={}, amount={}", pageNum, amount);
+        boardService.updateBoard(board);
+        return "redirect:/board/{id}?pageNum=" + cri.getPageNum() +"&amount=" + cri.getAmount();
     }
 
     /*글 삭제 POST
     * URL(POST) : /board/{id}/delete
+    * 2022-08-29 삭제버튼이 form안에 위치하면서 GET 요청밖에 되지않는다.
+    * 어떻게 해야할지 방법을 찾아보자
     * */
-    @PostMapping("/{id}/delete")
-    public String deleteBoard(@PathVariable int id) {
+    @GetMapping("/{id}/delete")
+    public String deleteBoard(@PathVariable int id, Criteria cri) {
         boardService.deleteBoard(id);
-        return "redirect:board";
+        return "redirect:/board?pageNum=" + cri.getPageNum() +"&amount=" + cri.getAmount();
     }
 }

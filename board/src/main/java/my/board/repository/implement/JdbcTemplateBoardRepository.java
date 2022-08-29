@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -32,6 +33,8 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     private String insertBoard = "INSERT INTO BOARD (ID, TITLE, CONTENT, NICKNAME) VALUES (board_seq.nextval, ?, ?, ?)";
     private String selectTenBoard_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM BOARD ORDER BY REGDATE DESC) TB) B WHERE RN BETWEEN ? AND ?";
     private String getCount_sql = "SELECT COUNT(*) FROM BOARD";
+    private String update_sql = "UPDATE BOARD SET TITLE=?, CONTENT=?, UPDATEDATE=? WHERE ID=?";
+    private String delete_sql = "DELETE FROM BOARD WHERE ID = ?";
 
     @Override
     public List<Board> selectBoard(Criteria cri) {
@@ -62,12 +65,13 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
 
     @Override
     public void updateBoard(Board board) {
-
+        log.info("updateBoard");
+        jdbcTemplate.update(update_sql, board.getTitle(), board.getContent(), new Date(), board.getId());
     }
 
     @Override
     public void deleteBoard(int id) {
-
+        jdbcTemplate.update(delete_sql, id);
     }
 
     @Override

@@ -9,7 +9,7 @@
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Study</a>
+        <a class="navbar-brand" href="/tw">Study</a>
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link text-light" href="#">로그인</a>
@@ -44,7 +44,8 @@
         <c:forEach var="board" items="${list}">
             <tr>
                 <td>${board.id}</td>
-                <td><a href="/board/${board.id}">${board.title}</a></td>
+                <td><a href="/board/${board.id}?pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}">
+                        ${board.title}</a></td>
                 <td>${board.nickname}</td>
                 <td>${board.hit}</td>
                 <td>${board.regdate}</td>

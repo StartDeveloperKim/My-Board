@@ -46,10 +46,14 @@
         </div>
         <div class="mb-3 mt-3">
             <label for="nickname" class="form-label">작성자 닉네임:</label>
-            <input type="text" class="form-control" id="nickname" placeholder="제목을 입력해주세요" name="nickname">
+            <%--나중에 로그인 기능을 만들어 회원 닉네임이 바로 들어갈 수 있도록하자--%>
+            <input type="text" class="form-control" id="nickname" placeholder="닉네임을 입력해주세요" name="nickname">
         </div>
         <button type="submit" class="btn btn-outline-primary"
                 onclick="location.href='/board/new'">등록하기</button>
+        <button type="reset" class="btn btn-outline-danger">초기화</button>
+        <button type="button" class="btn btn-outline-dark"
+                onclick="location.href='/board'">취소</button>
     </form>
 </div>
 
