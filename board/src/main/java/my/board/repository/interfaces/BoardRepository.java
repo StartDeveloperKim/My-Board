@@ -24,7 +24,7 @@ public interface BoardRepository {
     public Board selectById(int id);
 
     /*글 등록*/
-    public void insertBoard(BoardRegisterDTO registerDTO);
+    public void insertBoard(Board board);
 
     /*글 수정*/
     public void updateBoard(Board board);

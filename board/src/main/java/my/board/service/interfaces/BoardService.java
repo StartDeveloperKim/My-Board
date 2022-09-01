@@ -27,7 +27,7 @@ public interface BoardService {
 
     public Board getBoardById(int id);
 
-    public void insertBoard(BoardRegisterDTO registerDTO);
+    public void insertBoard(Board board);
 
     public void updateBoard(Board board);
 

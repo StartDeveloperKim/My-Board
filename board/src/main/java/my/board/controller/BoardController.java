@@ -9,6 +9,8 @@ import my.board.domain.Page;
 import my.board.service.interfaces.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -60,9 +62,15 @@ public class BoardController {
      * URL(POST) : /board/new
      * */
     @PostMapping("/new")
-    public String postBoard(@ModelAttribute BoardRegisterDTO registerDTO) {
-        boardService.insertBoard(registerDTO);
-        log.info("/board/new --> POST, BoardRegisterDTO : {}", registerDTO.toString());
+    public String postBoard(@Validated @ModelAttribute Board board, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult.getAllErrors());
+            return "/board/regist";
+        }
+
+        boardService.insertBoard(board);
+        log.info("/board/new --> POST, BoardRegisterDTO : {}", board.toString());
         return "redirect:/board";
     }
 

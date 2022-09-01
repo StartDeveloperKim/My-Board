@@ -1,7 +1,6 @@
 package my.board.service.implement;
 
 import my.board.domain.Board;
-import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
 import my.board.repository.interfaces.BoardRepository;
 import my.board.service.interfaces.BoardService;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.lang.model.SourceVersion;
 import java.util.List;
 
 @SpringBootTest
@@ -21,7 +19,7 @@ class BoardServiceImplTest {
     @Autowired
     private BoardRepository boardRepository;
 
-    @Test
+    /*@Test
     @DisplayName("글 등록 및 가져오기 테스트")
     void BoardRegisterTest() {
         BoardRegisterDTO board = new BoardRegisterDTO("세번쨰 글입니다.", "하하", "틔우");
@@ -29,7 +27,7 @@ class BoardServiceImplTest {
 
         Board boardById = boardService.getBoardById(3);
         System.out.println("boardById = " + boardById.toString());
-    }
+    }*/
 
     @Test
     @DisplayName("글 목록 가져오기")

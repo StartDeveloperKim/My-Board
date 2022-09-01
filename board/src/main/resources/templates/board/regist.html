@@ -12,6 +12,10 @@
             width: 100%;
             text-align: center;
         }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
@@ -36,18 +40,25 @@
 
 <div class="container">
     <form action="/board/new" method="post" th:object="${board}">
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
+        </div>
+
         <div class="mb-3 mt-3">
             <label for="title" class="form-label">제목:</label>
             <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="제목을 입력해주세요">
+            <div class="field-error" th:errors="*{title}">제목 오류</div>
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">본문:</label>
             <textarea class="form-control" id="content" th:field="*{content}" rows="10" placeholder="본문을 입력해주세요"></textarea>
+            <div class="field-error" th:errors="*{content}">본문 오류</div>
         </div>
         <div class="mb-3 mt-3">
             <label for="nickname" class="form-label">작성자 닉네임:</label>
             <!--나중에 로그인 기능을 만들어 회원 닉네임이 바로 들어갈 수 있도록하자-->
             <input type="text" class="form-control" id="nickname" placeholder="닉네임을 입력해주세요" th:field="*{nickname}">
+            <div class="field-error" th:errors="*{nickname}">닉네임 오류</div>
         </div>
         <button type="submit" class="btn btn-outline-primary"
                 onclick="location.href='/board/new'">등록하기</button>

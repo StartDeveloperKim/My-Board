@@ -59,8 +59,8 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     }
 
     @Override
-    public void insertBoard(BoardRegisterDTO registerDTO) {
-        jdbcTemplate.update(insertBoard, registerDTO.getTitle(), registerDTO.getContent(), registerDTO.getNickname());
+    public void insertBoard(Board board) {
+        jdbcTemplate.update(insertBoard, board.getTitle(), board.getContent(), board.getNickname());
     }
 
     @Override

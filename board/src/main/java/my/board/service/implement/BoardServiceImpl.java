@@ -36,8 +36,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void insertBoard(BoardRegisterDTO registerDTO) {
-        boardRepository.insertBoard(registerDTO);
+    public void insertBoard(Board board) {
+        boardRepository.insertBoard(board);
     }
 
     @Override
