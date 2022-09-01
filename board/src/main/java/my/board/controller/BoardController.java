@@ -28,7 +28,7 @@ public class BoardController {
         model.addAttribute("list", boardService.getBoardList(cri));
         model.addAttribute("pageMaker", new Page(cri, boardService.getTotal()));
         log.info("/board -> cri = {}", cri.toString());
-        return "board/list";
+        return "/board/list";
     }
 
     /*자세한 페이지
@@ -39,15 +39,17 @@ public class BoardController {
         model.addAttribute("board", boardService.getBoardById(id));
         //log.info("/board/{}, pageNum={}, amount={}", id, pageNum, amount);
 
-        return "board/detail";
+        return "/board/detail";
     }
 
     /*단순히 등록 폼으로 이동
      * URL(GET) : /board/new
      * */
     @GetMapping("/new")
-    public String registerBoard() {
-        return "board/regist";
+    public String registerBoard(Model model) {
+        /*타임리프에서 사용하기 위한 비어있는 객체 하나 전달*/
+        model.addAttribute("board", new Board());
+        return "/board/regist";
     }
 
     /*글 등록
@@ -72,7 +74,7 @@ public class BoardController {
         log.info("id={}", id);
 
         model.addAttribute("board", boardService.getBoardById(id));
-        return "board/edit";
+        return "/board/edit";
     }
 
     /*글 수정 POST
@@ -82,7 +84,7 @@ public class BoardController {
     @PostMapping("/{id}/edit")
     public String updateBoard(@PathVariable int id, Criteria cri, Board board) {
         log.info("updateBoard = {}", board.toString());
-        log.info("Criteria : {}, {}", cri.getPageNum(), cri.getAmount());
+        //log.info("Criteria : {}, {}", cri.getPageNum(), cri.getAmount());
 
         //log.info("pageNum={}, amount={}", pageNum, amount);
         boardService.updateBoard(board);

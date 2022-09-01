@@ -1,6 +1,7 @@
 package my.board.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -9,6 +10,7 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class Board {
 
     private int id;

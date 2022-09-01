@@ -16,7 +16,7 @@ public class MemberController {
 
     @GetMapping
     public String registerMember_form() {
-        return "member/regist";
+        return "/member/regist";
     }
 
     @PostMapping
@@ -31,6 +31,6 @@ public class MemberController {
     @GetMapping("/success")
     public String successRegister() {
         /*addFlashAttribute를 사용하면 redirect된 view에서 사용이 가능한 것인가?*/
-        return "member/success";
+        return "/member/success";
     }
 }
