@@ -68,9 +68,12 @@
             </tr>
         </tbody>
     </table>
-    <div >
+    <div th:if="${member!=null}">
         <button type="button" class="btn btn-outline-dark"
                 onclick="location.href='/board'">더보기</button>
+    </div>
+    <div th:if="${member==null}">
+        <b style="color: #005cbf">더 많은 글을 보고싶다면 회원가입/로그인 하세요~</b>
     </div>
 </div>
 

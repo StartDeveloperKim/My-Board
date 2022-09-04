@@ -57,8 +57,8 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute MemberLoginDto loginDto, BindingResult bindingResult,
-                        @RequestParam(required = false, defaultValue = "/") String redirectURL,
+    public String login(@Validated @ModelAttribute("loginForm") MemberLoginDto loginDto, BindingResult bindingResult,
+                        @RequestParam(required = false, defaultValue = "/tw") String redirectURL,
                         HttpServletRequest request,
                         RedirectAttributes redirectAttributes) {
 
@@ -76,10 +76,9 @@ public class MemberController {
         // request.getSession은 기본이 true이다. 이 경우 session이 없다면 생성하고 있으면 반환한다.
         // false로 설정한다면 없어도 세션이 생성되지는 않는다.
         HttpSession session = request.getSession();
-
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
-        return "redirect:/tw";
+        return "redirect:" + redirectURL;
     }
 
     @PostMapping("/logout")
@@ -89,6 +88,6 @@ public class MemberController {
             session.invalidate(); // 세션을 제거
         }
 
-        return "redirect:/tw";
+        return "redirect:/tw"; // welcome 페이지로 redirect
     }
 }

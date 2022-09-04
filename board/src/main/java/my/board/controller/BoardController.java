@@ -22,18 +22,18 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    /*게시판 페이지 --> 페이징 처리 구현 필요
+    /**게시판 페이지 --> 페이징 처리 구현 필요
      * URL(GET) : /board
      * */
     @GetMapping
     public String getBoardList(Criteria cri,  Model model) {
         model.addAttribute("list", boardService.getBoardList(cri));
         model.addAttribute("pageMaker", new Page(cri, boardService.getTotal()));
-        log.info("/board -> cri = {}", cri.toString());
+        //log.info("/board -> cri = {}", cri.toString());
         return "/board/list";
     }
 
-    /*자세한 페이지
+    /**자세한 페이지
      * URL(GET) : /board/{id}
      * */
     @GetMapping("/{id}")
@@ -44,7 +44,7 @@ public class BoardController {
         return "/board/detail";
     }
 
-    /*단순히 등록 폼으로 이동
+    /**단순히 등록 폼으로 이동
      * URL(GET) : /board/new
      * */
     @GetMapping("/new")
@@ -54,7 +54,7 @@ public class BoardController {
         return "/board/regist";
     }
 
-    /*글 등록
+    /**글 등록
      * ID를 받아와서 detail 창을 보여주고 싶은데 로직 순서를 어떻게 해야할지 모르겠다
      * 지금 떠오르는 것은 @Transactional 어노테이션
      * 일단은 글이 등록되면 board로 redirect하고 Modal창을 띄우는 것으로 하자
@@ -74,7 +74,7 @@ public class BoardController {
         return "redirect:/board";
     }
 
-    /*글 수정 폼
+    /**글 수정 폼
      * URL(GET) : /board/{id}/edit
      * */
     @GetMapping("/{id}/edit")
@@ -85,7 +85,7 @@ public class BoardController {
         return "/board/edit";
     }
 
-    /*글 수정 POST
+    /**글 수정 POST
      * URL(POST) : /board/{id}/edit
      * 수정버튼 누르면 detail page로 redirect
      * */
@@ -99,7 +99,7 @@ public class BoardController {
         return "redirect:/board/{id}?pageNum=" + cri.getPageNum() +"&amount=" + cri.getAmount();
     }
 
-    /*글 삭제 POST
+    /**글 삭제 POST
     * URL(POST) : /board/{id}/delete
     * 2022-08-29 삭제버튼이 form안에 위치하면서 GET 요청밖에 되지않는다.
     * 어떻게 해야할지 방법을 찾아보자
