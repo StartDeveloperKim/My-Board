@@ -1,8 +1,9 @@
-package my.board.repository.implement;
+package my.member.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import my.board.domain.Member;
-import my.board.repository.interfaces.MemberRepository;
+import my.member.domain.Member;
+import my.member.domain.MemberLoginDto;
+import my.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,8 +25,8 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    private String insert_sql = "INSERT INTO MEMBER3 (ID, PASSWORD, NAME, NICKNAME, BIRTHDATE) VALUES (?, ?, ?, ?, ?)";
-    private String selectById_sql = "SELECT * FROM MEMBER3 WHERE ID = ?";
+    private String insert_sql = "INSERT INTO MEMBER3 (ID, PASSWORD, NAME, NICKNAME) VALUES (?, ?, ?, ?)";
+    private String selectById_sql = "SELECT * FROM MEMBER3 WHERE ID = ? and PASSWORD = ?";
 
     @Override
     public void insert(Member member) {
@@ -33,13 +34,12 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
                 member.getId(),
                 member.getPassword(),
                 member.getName(),
-                member.getNickname(),
-                member.getBirthdate());
+                member.getNickname());
     }
 
     @Override
-    public Member selectById(String id) {
-        List<Member> member = jdbcTemplate.query(selectById_sql, rowMapper, id);
+    public Member selectByIdandPassword(MemberLoginDto loginDto) {
+        List<Member> member = jdbcTemplate.query(selectById_sql, rowMapper, loginDto.getId(), loginDto.getPassword());
         if(member.isEmpty()){
             /* 나중에 예외처리를 공부하고 다시 작성해보자 */
             return null;
@@ -53,8 +53,7 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
             Member member = new Member(rs.getString("ID"),
                     rs.getString("PASSWORD"),
                     rs.getString("NAME"),
-                    rs.getString("NICKNAME"),
-                    rs.getDate("BIRTHDATE"));
+                    rs.getString("NICKNAME"));
             member.setRegdate(rs.getDate("REGDATE"));
             return member;
         }

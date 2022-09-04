@@ -1,4 +1,4 @@
-package my.board;
+package my;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

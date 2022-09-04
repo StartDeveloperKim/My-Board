@@ -20,16 +20,25 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="/tw">Study</a>
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link text-light" href="#">로그인</a>
+            <li class="nav-item" th:if="${member==null}">
+                <a class="nav-link text-light" href="/member/login">로그인</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-light" href="#">회원가입</a>
+            <li class="nav-item" th:if="${member==null}">
+                <a class="nav-link text-light" href="/member">회원가입</a>
+            </li>
+            <li class="nav-item" th:if="${member!=null}">
+                <form th:action="@{/member/logout}" method="post">
+                    <button type="submit" class="btn btn-outline-danger">로그아웃</button>
+                </form>
+                <!--<a class="nav-link text-light" href="/member/logout">로그아웃</a>-->
             </li>
         </ul>
     </div>
 </nav>
 <div class="container p-5 my-5 bg-dark text-white">
+    <div th:if="${member!=null}">
+        <h1 th:text="${member.nickname} + '님 환영합니다!!'"></h1>
+    </div>
     <h2>안녕하세요~공부블로그 입니다</h2>
     <p>새로운 것을 공부할 때마다 기능이 추가됩니다!!!</p>
 </div>

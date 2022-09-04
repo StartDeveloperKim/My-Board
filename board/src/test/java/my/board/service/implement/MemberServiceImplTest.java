@@ -1,9 +1,8 @@
 package my.board.service.implement;
 
-import my.board.domain.Member;
-import my.board.repository.interfaces.MemberRepository;
-import my.board.service.interfaces.MemberService;
-import org.assertj.core.api.Assertions;
+import my.member.domain.Member;
+import my.member.repository.MemberRepository;
+import my.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +18,14 @@ class MemberServiceImplTest {
     @Autowired
     MemberService memberService;
 
-    @Test
+    /*@Test
     @DisplayName("회원등록 서비스 테스트")
     void memberRegisterTest() {
-        /*String --> java.sql.date 변환*/
+        *//*String --> java.sql.date 변환*//*
         String d = "1999-2-12";
         java.sql.Date date = java.sql.Date.valueOf(d);
 
-        Member member = new Member("park", "0000", "박진수", "park진수", date);
+        Member member = new Member("park", "0000", "박진수", "park진수");
         memberService.register(member);
     }
 
@@ -34,7 +33,7 @@ class MemberServiceImplTest {
     @DisplayName("회원조회 서비스 테스트")
     void memberSelectTest(){
         String id = "lee";
-        Member member = memberService.selectById(id);
+        Member member = memberService.selectByIdandPassword(id);
         System.out.println(member.toString());
-    }
+    }*/
 }

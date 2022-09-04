@@ -1,9 +1,10 @@
-package my.board.service.implement;
+package my.member.service;
 
 import lombok.RequiredArgsConstructor;
-import my.board.domain.Member;
-import my.board.repository.interfaces.MemberRepository;
-import my.board.service.interfaces.MemberService;
+import my.member.domain.Member;
+import my.member.domain.MemberLoginDto;
+import my.member.repository.MemberRepository;
+import my.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +19,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member selectById(String id) {
-        return memberRepository.selectById(id);
+    public Member selectByIdandPassword(MemberLoginDto loginDto) {
+        return memberRepository.selectByIdandPassword(loginDto);
     }
 }
