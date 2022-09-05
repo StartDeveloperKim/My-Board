@@ -64,7 +64,8 @@ public class BoardController {
     @GetMapping("/new")
     public String registerBoard(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
                                 Model model) {
-        /*타임리프에서 사용하기 위한 비어있는 객체 하나 전달*/
+        // 새 Board 객체에 로그인된 사용자의 닉네임을 미리 설정하여 전달한다.
+        // 그럼 View에서 해당 nickname을 뽑아 readonly 설정으로 보여줄 수 있게된다.
         Board board = new Board();
         board.setNickname(loginMember.getNickname());
 
