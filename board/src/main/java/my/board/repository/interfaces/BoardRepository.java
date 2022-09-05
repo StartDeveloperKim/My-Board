@@ -33,4 +33,6 @@ public interface BoardRepository {
     public void deleteBoard(int id);
 
     public int getTotal();
+
+    public void updateHit(Board board);
 }

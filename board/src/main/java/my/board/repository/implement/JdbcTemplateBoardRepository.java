@@ -35,6 +35,7 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     private String getCount_sql = "SELECT COUNT(*) FROM BOARD";
     private String update_sql = "UPDATE BOARD SET TITLE=?, CONTENT=?, UPDATEDATE=? WHERE ID=?";
     private String delete_sql = "DELETE FROM BOARD WHERE ID = ?";
+    private String updateHit_sql = "UPDATE BOARD SET HIT = ? WHERE ID=?";
 
     @Override
     public List<Board> selectBoard(Criteria cri) {
@@ -83,6 +84,11 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
             }
         });
         return result;
+    }
+
+    @Override
+    public void updateHit(Board board) {
+        jdbcTemplate.update(updateHit_sql, board.getHit(), board.getId());
     }
 
     private RowMapper<Board> rowMapper = new RowMapper<Board>() {

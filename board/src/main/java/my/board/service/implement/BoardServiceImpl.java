@@ -49,4 +49,10 @@ public class BoardServiceImpl implements BoardService {
     public void deleteBoard(int id) {
         boardRepository.deleteBoard(id);
     }
+
+    @Override
+    public void updateHit(Board board) {
+        board.setHit(board.getHit() + 1);
+        boardRepository.updateHit(board);
+    }
 }

@@ -56,7 +56,7 @@
         <div class="mb-3 mt-3">
             <label for="nickname" class="form-label">작성자 닉네임:</label>
             <!--나중에 로그인 기능을 만들어 회원 닉네임이 바로 들어갈 수 있도록하자-->
-            <input type="text" class="form-control" id="nickname" placeholder="닉네임을 입력해주세요" th:field="*{nickname}">
+            <input type="text" class="form-control" id="nickname" placeholder="닉네임을 입력해주세요" th:field="*{nickname}" readonly>
             <div class="field-error" th:errors="*{nickname}">닉네임 오류</div>
         </div>
         <button type="submit" class="btn btn-outline-primary"

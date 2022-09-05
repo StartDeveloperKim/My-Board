@@ -7,12 +7,17 @@ import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
 import my.board.domain.Page;
 import my.board.service.interfaces.BoardService;
+import my.member.SessionConst;
+import my.member.domain.Member;
+import org.apache.el.parser.BooleanNode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,12 +39,21 @@ public class BoardController {
     }
 
     /**자세한 페이지
-     * URL(GET) : /board/{id}
+     * URL(GET) : /board/{id} <br>
+     * 조회수 기능 만들기 --> 해당 페이지 누를때 마다 조회수 1씩 plus <br>
+     * 해당 id의 글의 hit를 가져온다 -> +1 연산을 한 뒤에 업데이트 한다.
      * */
     @GetMapping("/{id}")
-    public String getBoard(@PathVariable int id, Model model) {
-        model.addAttribute("board", boardService.getBoardById(id));
-        //log.info("/board/{}, pageNum={}, amount={}", id, pageNum, amount);
+    public String getBoard(@PathVariable int id, Model model,
+                           @RequestParam(required = false, defaultValue = "false") String status) {
+        Board board = boardService.getBoardById(id);
+
+        log.info("status = {}", status);
+        if (status.equals("true")) {
+            boardService.updateHit(board); // 조회수 서비스
+        }
+
+        model.addAttribute("board", board);
 
         return "/board/detail";
     }
@@ -48,9 +62,13 @@ public class BoardController {
      * URL(GET) : /board/new
      * */
     @GetMapping("/new")
-    public String registerBoard(Model model) {
+    public String registerBoard(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
+                                Model model) {
         /*타임리프에서 사용하기 위한 비어있는 객체 하나 전달*/
-        model.addAttribute("board", new Board());
+        Board board = new Board();
+        board.setNickname(loginMember.getNickname());
+
+        model.addAttribute("board", board);
         return "/board/regist";
     }
 
@@ -92,9 +110,7 @@ public class BoardController {
     @PostMapping("/{id}/edit")
     public String updateBoard(@PathVariable int id, Criteria cri, Board board) {
         log.info("updateBoard = {}", board.toString());
-        //log.info("Criteria : {}, {}", cri.getPageNum(), cri.getAmount());
 
-        //log.info("pageNum={}, amount={}", pageNum, amount);
         boardService.updateBoard(board);
         return "redirect:/board/{id}?pageNum=" + cri.getPageNum() +"&amount=" + cri.getAmount();
     }

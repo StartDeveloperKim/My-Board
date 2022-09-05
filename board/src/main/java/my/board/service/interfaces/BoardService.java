@@ -32,4 +32,6 @@ public interface BoardService {
     public void updateBoard(Board board);
 
     public void deleteBoard(int id);
+
+    void updateHit(Board board);
 }
