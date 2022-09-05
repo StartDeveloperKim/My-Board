@@ -11,6 +11,7 @@ import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,6 +35,10 @@ public class MemberController {
 
     @PostMapping
     public String registerMember(@Validated @ModelAttribute("member") MemberRegisterDto registerDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        if (!registerDto.getConfirmPassword().equals(registerDto.getPassword())) {
+            bindingResult.addError(new FieldError("member", "confirmPassword", "비밀번호와 확인 비밀번호가 일치하지 않습니다."));
+        }
 
         if (bindingResult.hasErrors()) {
             log.info("/member error = {}", bindingResult.getAllErrors());

@@ -18,6 +18,9 @@ public class MemberRegisterDto {
     private String password;
 
     @NotBlank
+    private String confirmPassword;
+
+    @NotBlank
     private String name;
 
     @NotBlank
