@@ -48,7 +48,7 @@
             <input type="text" class="form-control" id="nickname" th:field="*{nickname}" readonly>
         </div>
         <hr>
-        <button type="submit" class="btn btn-outline-primary">수정하기</button>
+        <button type="submit" class="btn btn-outline-primary" th:onclick="editCheck()">수정하기</button>
         <button type="button" class="btn btn-outline-danger"
                 th:onclick="|location.href='@{/board/{id}/delete(id=${board.id}, pageNum=${param.pageNum}, amouont=${param.amount})}'|">삭제하기</button>
         <button type="button" class="btn btn-outline-dark"
@@ -63,5 +63,20 @@
             <a href="mailto:hege@example.com">tw@example.com</a></p>
     </footer>
 </div>
+
+<script>
+    function editCheck(){
+        let check = confirm("정말로 수정하시겠습니까?");
+        if(check){
+            alert("수정되었습니다.");
+        }
+    }
+    function deleteCheck(){
+        let check = confirm("정말로 삭제하시겠습니까?");
+        if (check) {
+            alert("삭제되었습니다.");
+        }
+    }
+</script>
 </body>
 </html>
