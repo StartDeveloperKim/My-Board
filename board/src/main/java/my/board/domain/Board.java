@@ -40,9 +40,9 @@ public class Board {
         this.updatedate = updatedate;
     }
 
-    /*public Board(String title, String content, String nickname) {
+    public Board(String title, String content, String nickname) {
         this.title = title;
         this.content = content;
         this.nickname = nickname;
-    }*/
+    }
 }

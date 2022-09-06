@@ -81,15 +81,19 @@ public class BoardController {
      * URL(POST) : /board/new
      * */
     @PostMapping("/new")
-    public String postBoard(@Validated @ModelAttribute Board board, BindingResult bindingResult) {
+    public String postBoard(@Validated @ModelAttribute BoardRegisterDTO registerDTO, BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult.getAllErrors());
             return "/board/regist";
         }
 
+        Board board = new Board(registerDTO.getTitle(), registerDTO.getContent(), registerDTO.getNickname());
+
         boardService.insertBoard(board);
-        log.info("/board/new --> POST, BoardRegisterDTO : {}", board.toString());
+        redirectAttributes.addAttribute("status", true);
+        //log.info("/board/new --> POST, BoardRegisterDTO : {}", board.toString());
         return "redirect:/board";
     }
 
