@@ -66,10 +66,10 @@ public class BoardController {
                                 Model model) {
         // 새 Board 객체에 로그인된 사용자의 닉네임을 미리 설정하여 전달한다.
         // 그럼 View에서 해당 nickname을 뽑아 readonly 설정으로 보여줄 수 있게된다.
-        Board board = new Board();
-        board.setNickname(loginMember.getNickname());
+        BoardRegisterDTO boardRegisterDTO = new BoardRegisterDTO();
+        boardRegisterDTO.setNickname(loginMember.getNickname());
 
-        model.addAttribute("board", board);
+        model.addAttribute("board", boardRegisterDTO);
         return "/board/regist";
     }
 
@@ -81,7 +81,7 @@ public class BoardController {
      * URL(POST) : /board/new
      * */
     @PostMapping("/new")
-    public String postBoard(@Validated @ModelAttribute BoardRegisterDTO registerDTO, BindingResult bindingResult,
+    public String postBoard(@Validated @ModelAttribute("board") BoardRegisterDTO registerDTO, BindingResult bindingResult,
                             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
@@ -113,8 +113,12 @@ public class BoardController {
      * 수정버튼 누르면 detail page로 redirect
      * */
     @PostMapping("/{id}/edit")
-    public String updateBoard(@PathVariable int id, Criteria cri, Board board) {
+    public String updateBoard(@PathVariable int id, Criteria cri, @Validated Board board, BindingResult bindingResult) {
         log.info("updateBoard = {}", board.toString());
+
+        if (bindingResult.hasErrors()) {
+            return "/board/edit";
+        }
 
         boardService.updateBoard(board);
         return "redirect:/board/{id}?pageNum=" + cri.getPageNum() +"&amount=" + cri.getAmount();

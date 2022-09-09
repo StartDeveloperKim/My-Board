@@ -12,6 +12,10 @@
             width: 100%;
             text-align: center;
         }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
@@ -35,13 +39,18 @@
 
 <div class="container">
     <form action="list.html" th:action="@{/board/{id}/edit(id=${board.id}, pageNum=${param.pageNum}, amount=${param.amount})}" method="POST" th:object="${board}">
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
+        </div>
         <div class="mb-3 mt-3">
             <label for="title" class="form-label">제목:</label>
-            <input type="text" class="form-control" id="title" th:field="*{title}">
+            <input type="text" class="form-control" th:errorclass="field-error" id="title" th:field="*{title}">
+            <div class="field-error" th:errors="*{title}">제목 오류</div>
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">본문:</label>
-            <textarea class="form-control" name="content" id="content" rows="10" th:text="*{content}">오류오류</textarea>
+            <textarea class="form-control" th:errorclass="field-error" name="content" id="content" rows="10" th:text="*{content}">오류오류</textarea>
+            <div class="field-error" th:errors="*{content}"></div>
         </div>
         <div class="mb-3 mt-3">
             <label for="nickname" class="form-label">작성자 닉네임:</label>
@@ -64,7 +73,7 @@
     </footer>
 </div>
 
-<script>
+<!--<script>
     function editCheck(){
         let check = confirm("정말로 수정하시겠습니까?");
         if(check){
@@ -77,6 +86,6 @@
             alert("삭제되었습니다.");
         }
     }
-</script>
+</script>-->
 </body>
 </html>

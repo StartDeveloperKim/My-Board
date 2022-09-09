@@ -52,7 +52,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void updateHit(Board board) {
-        board.setHit(board.getHit() + 1);
+        board.setHit(board.getHit() + 1); // 조회수 1늘리는 로직
         boardRepository.updateHit(board);
     }
 }
