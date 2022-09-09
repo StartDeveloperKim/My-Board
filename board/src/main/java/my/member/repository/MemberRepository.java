@@ -9,4 +9,6 @@ public interface MemberRepository {
 
     public Member selectByIdandPassword(MemberLoginDto loginDto);
 
+    public Member selectById(String id);
+
 }

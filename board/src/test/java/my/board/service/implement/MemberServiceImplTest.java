@@ -36,4 +36,12 @@ class MemberServiceImplTest {
         Member member = memberService.selectByIdandPassword(id);
         System.out.println(member.toString());
     }*/
+
+    @Test
+    @DisplayName("회원 ID 중복 테스트")
+    void memberSeclectByIdTest() {
+        String id = "park";
+        boolean result = memberService.selectById(id);
+        System.out.println(result);
+    }
 }

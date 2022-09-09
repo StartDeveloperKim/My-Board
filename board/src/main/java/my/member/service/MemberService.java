@@ -8,4 +8,6 @@ public interface MemberService {
     public void register(Member member);
 
     public Member selectByIdandPassword(MemberLoginDto loginDto);
+
+    public boolean checkId(String id);
 }

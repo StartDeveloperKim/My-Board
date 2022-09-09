@@ -22,4 +22,9 @@ public class MemberServiceImpl implements MemberService {
     public Member selectByIdandPassword(MemberLoginDto loginDto) {
         return memberRepository.selectByIdandPassword(loginDto);
     }
+
+    @Override
+    public boolean checkId(String id) {
+        return memberRepository.selectById(id) == null;
+    }
 }

@@ -29,7 +29,7 @@ public class MemberController {
 
     @GetMapping
     public String registerMember_form(Model model) {
-        model.addAttribute("member", new MemberRegisterDto());
+        model.addAttribute("memberRegister", new MemberRegisterDto());
         return "/member/regist";
     }
 

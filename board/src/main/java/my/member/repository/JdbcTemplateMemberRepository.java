@@ -3,8 +3,8 @@ package my.member.repository;
 import lombok.extern.slf4j.Slf4j;
 import my.member.domain.Member;
 import my.member.domain.MemberLoginDto;
-import my.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.JdbcProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -26,7 +26,8 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
     }
 
     private String insert_sql = "INSERT INTO MEMBER3 (ID, PASSWORD, NAME, NICKNAME) VALUES (?, ?, ?, ?)";
-    private String selectById_sql = "SELECT * FROM MEMBER3 WHERE ID = ? and PASSWORD = ?";
+    private String selectByIdAndPw_sql = "SELECT * FROM MEMBER3 WHERE ID = ? and PASSWORD = ?";
+    private String selectById_sql = "SELECT * FROM MEMBER3 WHERE ID = ?";
 
     @Override
     public void insert(Member member) {
@@ -39,12 +40,23 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
 
     @Override
     public Member selectByIdandPassword(MemberLoginDto loginDto) {
-        List<Member> member = jdbcTemplate.query(selectById_sql, rowMapper, loginDto.getId(), loginDto.getPassword());
+        List<Member> member = jdbcTemplate.query(selectByIdAndPw_sql, rowMapper, loginDto.getId(), loginDto.getPassword());
         if(member.isEmpty()){
             /* 나중에 예외처리를 공부하고 다시 작성해보자 */
             return null;
         }
         return member.get(0);
+    }
+
+    @Override
+    public Member selectById(String id) {
+        try {
+            List<Member> result = jdbcTemplate.query(selectById_sql, rowMapper, id);
+            return result.get(0); // 멤버 반환
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     private RowMapper<Member> rowMapper = new RowMapper<Member>() {

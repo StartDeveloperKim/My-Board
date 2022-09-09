@@ -25,6 +25,6 @@ public class SpringConfig implements WebMvcConfigurer {
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/tw", "/member", "/member/login", "/member/logout",
-                        "/css/**", "/*.ico", "/error");
+                        "/css/**", "/*.ico", "/error", "/checking");
     }
 }
