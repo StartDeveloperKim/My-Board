@@ -33,8 +33,10 @@
 
         <div>
             <label for="id">로그인ID</label>
-            <button type="button" id="checkIdBtn" class="btn btn-outline-info">아이디 중복체크</button>
-            <input type="text" id="id" th:field="*{id}" class="form-control" th:errorclass="field-error">
+            <div>
+                <input type="text" id="id" th:field="*{id}" class="form-control" th:errorclass="field-error">
+                <button type="button" id="checkIdBtn" class="btn btn-outline-info">아이디 중복체크</button>
+            </div>
             <div class="field-error" th:errors="*{id}"></div>
             <p id="checkIdOK"></p>
         </div>

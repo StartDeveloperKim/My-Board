@@ -28,6 +28,8 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
     private String insert_sql = "INSERT INTO MEMBER3 (ID, PASSWORD, NAME, NICKNAME) VALUES (?, ?, ?, ?)";
     private String selectByIdAndPw_sql = "SELECT * FROM MEMBER3 WHERE ID = ? and PASSWORD = ?";
     private String selectById_sql = "SELECT * FROM MEMBER3 WHERE ID = ?";
+    private String updatePassword_sql = "UPDATE MEMBER3 SET PASSWORD = ? WHERE ID = ?";
+    private String updateNickname_sql = "UPDATE MEMBER3 SET NICKNAME = ? WHERE ID = ?";
 
     @Override
     public void insert(Member member) {
@@ -41,7 +43,7 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
     @Override
     public Member selectByIdandPassword(MemberLoginDto loginDto) {
         List<Member> member = jdbcTemplate.query(selectByIdAndPw_sql, rowMapper, loginDto.getId(), loginDto.getPassword());
-        if(member.isEmpty()){
+        if (member.isEmpty()) {
             /* 나중에 예외처리를 공부하고 다시 작성해보자 */
             return null;
         }
@@ -56,8 +58,18 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
         } catch (Exception e) {
             return null;
         }
-
     }
+
+    @Override
+    public int updatePassword(Member member) {
+        return jdbcTemplate.update(updatePassword_sql, member.getPassword(), member.getId());
+    }
+
+    @Override
+    public int updateNickname(Member member) {
+        return jdbcTemplate.update(updateNickname_sql, member.getNickname(), member.getId());
+    }
+
 
     private RowMapper<Member> rowMapper = new RowMapper<Member>() {
         @Override

@@ -11,4 +11,8 @@ public interface MemberRepository {
 
     public Member selectById(String id);
 
+    public int updatePassword(Member member);
+
+    public int updateNickname(Member member);
+
 }

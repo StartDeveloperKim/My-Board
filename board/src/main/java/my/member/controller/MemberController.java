@@ -34,7 +34,9 @@ public class MemberController {
     }
 
     @PostMapping
-    public String registerMember(@Validated @ModelAttribute("member") MemberRegisterDto registerDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String registerMember(@Validated @ModelAttribute("memberRegister") MemberRegisterDto registerDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        log.info("MemberController/registerMember");
 
         if (!registerDto.getConfirmPassword().equals(registerDto.getPassword())) {
             bindingResult.addError(new FieldError("member", "confirmPassword", "비밀번호와 확인 비밀번호가 일치하지 않습니다."));

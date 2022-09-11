@@ -26,12 +26,17 @@
             <li class="nav-item" th:if="${member==null}">
                 <a class="nav-link text-light" href="/member">회원가입</a>
             </li>
-            <li class="nav-item" th:if="${member!=null}">
-                <form th:action="@{/member/logout}" method="post">
-                    <button type="submit" class="btn btn-outline-danger">로그아웃</button>
-                </form>
-                <!--<a class="nav-link text-light" href="/member/logout">로그아웃</a>-->
-            </li>
+            <div th:if="${member!=null}">
+                <li class="nav-item" >
+                    <form th:action="@{/member/logout}" method="post">
+                        <button type="submit" class="btn btn-outline-danger">로그아웃</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="btn btn-outline-info">비밀번호변경</button>
+                </li>
+            </div>
+
         </ul>
     </div>
 </nav>

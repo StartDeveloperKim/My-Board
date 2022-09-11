@@ -2,10 +2,7 @@ package my.board.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import my.board.domain.Board;
-import my.board.domain.BoardRegisterDTO;
-import my.board.domain.Criteria;
-import my.board.domain.Page;
+import my.board.domain.*;
 import my.board.service.interfaces.BoardService;
 import my.member.SessionConst;
 import my.member.domain.Member;
