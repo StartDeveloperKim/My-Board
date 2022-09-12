@@ -26,6 +26,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member selectById(String id) {
+        return memberRepository.selectById(id);
+    }
+
+    @Override
     public boolean checkId(String id) {
         return memberRepository.selectById(id) == null;
     }

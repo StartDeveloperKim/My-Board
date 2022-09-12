@@ -11,6 +11,8 @@ public interface MemberService {
 
     public Member selectByIdandPassword(MemberLoginDto loginDto);
 
+    public Member selectById(String id);
+
     public boolean checkId(String id);
 
     public int updatePassword(String userId, MemberChangePwDto changePwDto);

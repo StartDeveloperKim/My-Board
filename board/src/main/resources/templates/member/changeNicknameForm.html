@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>닉네임 변경</title>
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="/resources/static/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
 </head>
 <body>
-
+<div class="container">
+    <div class="py-5 text-center">
+        <h2><b>닉네임 변경</b></h2>
+    </div>
+    <hr class="my-4">
+    <form th:action="@{/member/{userId}/nickname(userId=${member.id})}" th:object="${memberChangeNickname}" method="post">
+        <div>
+            <label for="nickname">새 닉네임</label>
+            <input type="text" id="nickname" th:field="*{nickname}" class="form-control" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{nickname}"></div>
+        </div>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-outline-primary btn-lg" type="submit">변경하기</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-outline-danger btn-lg" th:onclick="|location.href=@{/tw}|">취소하기</button>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
 </html>

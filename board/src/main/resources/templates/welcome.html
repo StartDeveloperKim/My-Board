@@ -33,7 +33,10 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="btn btn-outline-info">비밀번호변경</button>
+                    <button type="button" class="btn btn-outline-info" th:onclick="|location.href='@{/member/{userId}(userId=${member.id}, info='password')}'|">비밀번호변경</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="btn btn-outline-info" th:onclick="|location.href='@{/member/{userId}(userId=${member.id}, info='nickname')}'|">닉네임변경</button>
                 </li>
             </div>
 
