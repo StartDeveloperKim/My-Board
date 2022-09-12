@@ -21,7 +21,7 @@
         <h2><b>닉네임 변경</b></h2>
     </div>
     <hr class="my-4">
-    <form th:action="@{/member/{userId}/nickname(userId=${member.id})}" th:object="${memberChangeNickname}" method="post">
+    <form th:action="@{/member/{userId}/nickname(userId=${userId})}" th:object="${memberChangeNickname}" method="post">
         <div>
             <label for="nickname">새 닉네임</label>
             <input type="text" id="nickname" th:field="*{nickname}" class="form-control" th:errorclass="field-error">
@@ -33,7 +33,8 @@
                 <button class="w-100 btn btn-outline-primary btn-lg" type="submit">변경하기</button>
             </div>
             <div class="col">
-                <button class="w-100 btn btn-outline-danger btn-lg" th:onclick="|location.href=@{/tw}|">취소하기</button>
+                <button type="button" class="w-100 btn btn-outline-danger btn-lg"
+                        th:onclick="|location.href='@{/tw}'|">취소하기</button>
             </div>
         </div>
     </form>
