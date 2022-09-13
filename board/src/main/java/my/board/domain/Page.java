@@ -2,9 +2,11 @@ package my.board.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class Page {
 
     private int startPage; // 시작페이지

@@ -3,6 +3,7 @@ package my.board.repository.interfaces;
 import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
+import my.board.domain.Search;
 
 import java.util.List;
 
@@ -35,4 +36,10 @@ public interface BoardRepository {
     public int getTotal();
 
     public void updateHit(Board board);
+
+    /*검색후 반환*/
+    public List<Board> searchBoard(Criteria cri, Search search);
+
+    /*검색 결과에 대한 반환값 개수*/
+    public int searchBoardGetTotal(Search search);
 }

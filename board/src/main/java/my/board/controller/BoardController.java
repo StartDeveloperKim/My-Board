@@ -28,9 +28,20 @@ public class BoardController {
      * URL(GET) : /board
      * */
     @GetMapping
-    public String getBoardList(Criteria cri,  Model model) {
-        model.addAttribute("list", boardService.getBoardList(cri));
-        model.addAttribute("pageMaker", new Page(cri, boardService.getTotal()));
+    public String getBoardList(Criteria cri,
+                               @ModelAttribute Search search,
+                               Model model) {
+        log.info("query:{}, content:{}", search.getQuery(), search.getContent());
+        if (search.getQuery() != null && search.getContent() != null) {
+            // 검색어에 대한 list를 받아오는 로직을 실행
+            model.addAttribute("list", boardService.searchBoard(cri, search));
+            log.info("검색시 글 개수: {}", boardService.getTotalAtSearchBoard(search));
+            model.addAttribute("pageMaker", new Page(cri, boardService.getTotalAtSearchBoard(search)));
+        }
+        else{
+            model.addAttribute("list", boardService.getBoardList(cri));
+            model.addAttribute("pageMaker", new Page(cri, boardService.getTotal()));
+        }
         //log.info("/board -> cri = {}", cri.toString());
         return "/board/list";
     }

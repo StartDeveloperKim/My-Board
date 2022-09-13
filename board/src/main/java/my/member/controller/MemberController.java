@@ -65,7 +65,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute("loginForm") MemberLoginDto loginDto, BindingResult bindingResult,
-                        @RequestParam(required = false, defaultValue = "/tw") String redirectURL,
+                        @RequestParam(value = "redirectURL", required = false, defaultValue = "/tw") String redirectURL,
                         HttpServletRequest request,
                         RedirectAttributes redirectAttributes) {
 
@@ -84,6 +84,7 @@ public class MemberController {
         // false로 설정한다면 없어도 세션이 생성되지는 않는다.
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
+        log.info("redirectURL: {}", redirectURL);
 
         return "redirect:" + redirectURL;
     }

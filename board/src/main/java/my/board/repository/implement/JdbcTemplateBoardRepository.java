@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
+import my.board.domain.Search;
 import my.board.repository.interfaces.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,6 +37,12 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
     private String update_sql = "UPDATE BOARD SET TITLE=?, CONTENT=?, UPDATEDATE=? WHERE ID=?";
     private String delete_sql = "DELETE FROM BOARD WHERE ID = ?";
     private String updateHit_sql = "UPDATE BOARD SET HIT = ? WHERE ID=?";
+    
+    /*아래에 있는 것은 검색 쿼리문 */
+    private String searchBoardByTitle_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM (SELECT * FROM BOARD WHERE title LIKE ?) ORDER BY REGDATE DESC) TB) B WHERE RN BETWEEN ? AND ?";
+    private String searchBoardByNickname_sql = "SELECT B.* FROM (SELECT ROWNUM RN, TB.* FROM (SELECT * FROM (SELECT * FROM BOARD WHERE nickname LIKE ?) ORDER BY REGDATE DESC) TB) B WHERE RN BETWEEN ? AND ?";
+    private String searchBoardByTitleGetTotal_sql = "SELECT COUNT(*) FROM BOARD WHERE TITLE LIKE ?";
+    private String searchBoardByNicknameGetTotal_sql = "SELECT COUNT(*) FROM BOARD WHERE NICKNAME LIKE ?";
 
     @Override
     public List<Board> selectBoard(Criteria cri) {
@@ -77,18 +84,49 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
 
     @Override
     public int getTotal() {
-        Integer result = jdbcTemplate.queryForObject(getCount_sql, new RowMapper<Integer>() {
-            @Override
-            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return rs.getInt(1);
-            }
-        });
+        Integer result = jdbcTemplate.queryForObject(getCount_sql, GetTotalRowMapper);
+        if (result == null) {
+            return 0;
+        }
         return result;
     }
 
     @Override
     public void updateHit(Board board) {
         jdbcTemplate.update(updateHit_sql, board.getHit(), board.getId());
+    }
+
+    @Override
+    public List<Board> searchBoard(Criteria cri, Search search) {
+        String content = "%" + search.getContent() + "%";
+        int start = (((cri.getPageNum()-1) * cri.getAmount()) + 1);
+        int end = cri.getPageNum() * cri.getAmount();
+
+
+        if (search.getQuery().equals("title")){
+            return jdbcTemplate.query(searchBoardByTitle_sql, rowMapper,content, start, end);
+        } else if (search.getQuery().equals("nickname")) {
+            return jdbcTemplate.query(searchBoardByNickname_sql, rowMapper, content, start, end);
+        }
+
+        return null;
+    }
+
+    @Override
+    public int searchBoardGetTotal(Search search) {
+        String content = "%" + search.getContent() + "%";
+        Integer result = null;
+
+        if (search.getQuery().equals("title")) {
+            result = jdbcTemplate.queryForObject(searchBoardByTitleGetTotal_sql, GetTotalRowMapper, content);
+        } else if (search.getQuery().equals("nickname")) {
+            result = jdbcTemplate.queryForObject(searchBoardByNicknameGetTotal_sql, GetTotalRowMapper, content);
+        }
+
+        if (result == null) {
+            return 0;
+        }
+        return result;
     }
 
     private RowMapper<Board> rowMapper = new RowMapper<Board>() {
@@ -104,6 +142,13 @@ public class JdbcTemplateBoardRepository implements BoardRepository {
             );
             board.setId(rs.getInt("ID"));
             return board;
+        }
+    };
+
+    private RowMapper<Integer> GetTotalRowMapper = new RowMapper<Integer>() {
+        @Override
+        public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return rs.getInt(1);
         }
     };
 }

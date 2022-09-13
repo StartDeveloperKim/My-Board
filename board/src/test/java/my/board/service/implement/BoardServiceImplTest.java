@@ -2,6 +2,7 @@ package my.board.service.implement;
 
 import my.board.domain.Board;
 import my.board.domain.Criteria;
+import my.board.domain.Search;
 import my.board.repository.interfaces.BoardRepository;
 import my.board.service.interfaces.BoardService;
 import org.junit.jupiter.api.DisplayName;
@@ -60,6 +61,28 @@ class BoardServiceImplTest {
         List<Board> boardList = boardService.getBoardList(new Criteria());
 
         for (Board board : boardList) {
+            System.out.println("board = " + board.toString());
+        }
+    }
+
+    @Test
+    @DisplayName("검색 테스트, title")
+    void searchByTitleTest() {
+        Search search = new Search("title", "글");
+
+        List<Board> boards = boardService.searchBoard(new Criteria(), search);
+        for (Board board : boards) {
+            System.out.println("board = " + board.toString());
+        }
+    }
+
+    @Test
+    @DisplayName("검색 테스트, nickname")
+    void searchByNicknameTest() {
+        Search search = new Search("nickname", "투머치");
+
+        List<Board> boards = boardService.searchBoard(new Criteria(), search);
+        for (Board board : boards) {
             System.out.println("board = " + board.toString());
         }
     }

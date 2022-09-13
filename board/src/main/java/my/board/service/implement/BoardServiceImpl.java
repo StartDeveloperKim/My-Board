@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
+import my.board.domain.Search;
 import my.board.repository.interfaces.BoardRepository;
 import my.board.service.interfaces.BoardService;
 import org.springframework.stereotype.Service;
@@ -55,4 +56,15 @@ public class BoardServiceImpl implements BoardService {
         board.setHit(board.getHit() + 1); // 조회수 1늘리는 로직
         boardRepository.updateHit(board);
     }
+
+    @Override
+    public List<Board> searchBoard(Criteria cri, Search search) {
+        return boardRepository.searchBoard(cri, search);
+    }
+
+    @Override
+    public int getTotalAtSearchBoard(Search search) {
+        return boardRepository.searchBoardGetTotal(search);
+    }
+
 }

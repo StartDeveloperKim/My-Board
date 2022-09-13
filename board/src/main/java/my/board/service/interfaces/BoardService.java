@@ -3,6 +3,7 @@ package my.board.service.interfaces;
 import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
+import my.board.domain.Search;
 
 import java.util.List;
 
@@ -33,5 +34,9 @@ public interface BoardService {
 
     public void deleteBoard(int id);
 
-    void updateHit(Board board);
+    public void updateHit(Board board);
+
+    public List<Board> searchBoard(Criteria cri, Search search);
+
+    public int getTotalAtSearchBoard(Search search);
 }
