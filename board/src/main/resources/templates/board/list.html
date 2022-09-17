@@ -5,8 +5,13 @@
     <title>게시판</title>
     <link th:href="@{/css/bootstrap.min.css}"
           href="/resources/static/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
 </head>
-
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
@@ -40,18 +45,19 @@
             <p style="font-family: Impact, 'Arial Narrow Bold', sans-serif;">기본적인 게시판</p>
         </div>
         <div class="row">
-            <form method="get">
-                <div class="mx-auto input-group mt-3">
-                    <label>
-                        <select name="query" class="form-control">
-                            <option value="title">제목</option>
-                            <option value="nickname">닉네임</option>
-                        </select>
-                    </label>
-                    <input name="content" type="text" class="form-control" placeholder="검색어 입력" aria-label="search" aria-describedby="button-addon2">
-                    <button class="btn btn-success" type="submit" id="button-addon2">검색</button>
-                </div>
-            </form>
+<!--            <form method="get">-->
+<!--                <div class="mx-auto input-group mt-3">-->
+<!--                    <label>-->
+<!--                        <select name="query" class="form-control">-->
+<!--                            <option value="title">제목</option>-->
+<!--                            <option value="nickname">닉네임</option>-->
+<!--                        </select>-->
+<!--                    </label>-->
+<!--                    <input name="content" type="text" class="form-control" th:errorclass="field-error" placeholder="검색어 입력" aria-label="search" aria-describedby="button-addon2">-->
+<!--                    &lt;!&ndash;<div class="field-error" th:errors="${search.content}"></div>&ndash;&gt;-->
+<!--                    <button class="btn btn-success" type="submit" id="button-addon2">검색</button>-->
+<!--                </div>-->
+<!--            </form>-->
         </div>
 
     </div>
@@ -70,9 +76,9 @@
         <tbody>
             <tr th:each="board : ${list}">
                 <td th:text="${board.id}"></td>
-                <td th:if="${param.query == null && param.content == null}"><a th:href="@{/board/{id}(id=${board.id}, pageNum=${pageMaker.cri.pageNum}, amount=${pageMaker.cri.amount}, status=${true})}" th:text="${board.title}"></a></td>
-                <td th:if="${param.query != null && param.content != null}"><a th:href="@{/board/{id}(id=${board.id}, pageNum=${pageMaker.cri.pageNum}, amount=${pageMaker.cri.amount}, query=${param.query}, content=${param.content})}" th:text="${board.title}"></a></td>
-                <td th:text="${board.nickname}"></td>
+                <td th:if="${param.query == null && param.content == null}"><a th:href="@{/board/{id}(id=${board.id}, status=${true})}" th:text="${board.title}"></a></td>
+                <td th:if="${param.query != null && param.content != null}"><a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}"></a></td>
+                <td th:text="${board.member.nickname}"></td>
                 <td th:text="${board.hit}"></td>
                 <td th:text="${board.regdate}"></td>
                 <td><span th:text="${board.updatedate}?: _">수정X</span></td>
@@ -84,50 +90,50 @@
                 onclick="location.href='/board/new'">글 등록</button>
     </div>
 
-    <div class="container pt-3 pull-rights">
-        <div class="pull-right">
-            <ul class="pagination" th:with="start=${pageMaker.startPage}, end=${pageMaker.endPage}">
+<!--    <div class="container pt-3 pull-rights">-->
+<!--        <div class="pull-right">-->
+<!--            <ul class="pagination" th:with="start=${pageMaker.startPage}, end=${pageMaker.endPage}">-->
 
-                <li class="page-item" th:if="${pageMaker.prev && param.query==null && param.content==null}">
-                    <a class="page-link" th:href="@{/board(pageNum=${pageMaker.cri.pageNum - 1}, amount=${pageMaker.cri.amount})}" th:text="'이전'">이전</a>
-                </li>
+<!--                <li class="page-item" th:if="${pageMaker.prev && param.query==null && param.content==null}">-->
+<!--                    <a class="page-link" th:href="@{/board(pageNum=${pageMaker.cri.pageNum - 1}, amount=${pageMaker.cri.amount})}" th:text="'이전'">이전</a>-->
+<!--                </li>-->
 
-                <li class="page-item" th:if="${pageMaker.prev && param.query!=null && param.content!=null}">
-                    <a class="page-link" th:href="@{/board(pageNum=${pageMaker.cri.pageNum - 1}, amount=${pageMaker.cri.amount}, query=${param.query}, content=${param.content})}" th:text="'이전'">이전</a>
-                </li>
+<!--                <li class="page-item" th:if="${pageMaker.prev && param.query!=null && param.content!=null}">-->
+<!--                    <a class="page-link" th:href="@{/board(pageNum=${pageMaker.cri.pageNum - 1}, amount=${pageMaker.cri.amount}, query=${param.query}, content=${param.content})}" th:text="'이전'">이전</a>-->
+<!--                </li>-->
 
-                <span th:each="num : ${#numbers.sequence(start, end)}">
-                    <li class="page-item active" th:if="${num == pageMaker.cri.pageNum && num!=0}">
-                        <a class="page-link"
-                           th:if="${param.query==null && param.content==null}"
-                           th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount})}" th:text="${num}"></a>
-                        <a class="page-link"
-                        th:if="${param.query!=null && param.content!=null}"
-                        th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount}, query=${param.query}, content=${param.content})}" th:text="${num}"></a>
-                    </li>
-                    <li class="page-item" th:if="${num != pageMaker.cri.pageNum && num!=0}">
-                        <!--<a class="page-link" th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount})}" th:text="${num}"></a>-->
-                        <a class="page-link"
-                           th:if="${param.query==null && param.content==null}"
-                           th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount})}" th:text="${num}"></a>
-                        <a class="page-link"
-                           th:if="${param.query!=null && param.content!=null}"
-                           th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount}, query=${param.query}, content=${param.content})}" th:text="${num}"></a>
-                    </li>
-                </span>
+<!--                <span th:each="num : ${#numbers.sequence(start, end)}">-->
+<!--                    <li class="page-item active" th:if="${num == pageMaker.cri.pageNum && num!=0}">-->
+<!--                        <a class="page-link"-->
+<!--                           th:if="${param.query==null && param.content==null}"-->
+<!--                           th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount})}" th:text="${num}"></a>-->
+<!--                        <a class="page-link"-->
+<!--                        th:if="${param.query!=null && param.content!=null}"-->
+<!--                        th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount}, query=${param.query}, content=${param.content})}" th:text="${num}"></a>-->
+<!--                    </li>-->
+<!--                    <li class="page-item" th:if="${num != pageMaker.cri.pageNum && num!=0}">-->
+<!--                        <a class="page-link" th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount})}" th:text="${num}"></a>-->
+<!--                        <a class="page-link"-->
+<!--                           th:if="${param.query==null && param.content==null}"-->
+<!--                           th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount})}" th:text="${num}"></a>-->
+<!--                        <a class="page-link"-->
+<!--                           th:if="${param.query!=null && param.content!=null}"-->
+<!--                           th:href="@{/board(pageNum=${num}, amount=${pageMaker.cri.amount}, query=${param.query}, content=${param.content})}" th:text="${num}"></a>-->
+<!--                    </li>-->
+<!--                </span>-->
 
 
-                <li class="page-item" th:if="${pageMaker.next && param.query==null && param.content==null}">
-                    <a class="page-link" th:href="@{/board(pageNum=${pageMaker.cri.pageNum + 1}, amount=${pageMaker.cri.amount})}" th:text="'다음'">다음</a>
-                </li>
+<!--                <li class="page-item" th:if="${pageMaker.next && param.query==null && param.content==null}">-->
+<!--                    <a class="page-link" th:href="@{/board(pageNum=${pageMaker.cri.pageNum + 1}, amount=${pageMaker.cri.amount})}" th:text="'다음'">다음</a>-->
+<!--                </li>-->
 
-                <li class="page-item" th:if="${pageMaker.next && param.query!=null && param.content!=null}">
-                    <a class="page-link" th:href="@{/board(pageNum=${pageMaker.cri.pageNum + 1}, amount=${pageMaker.cri.amount}, query=${param.query}, content=${param.content})}" th:text="'다음'">다음</a>
-                </li>
+<!--                <li class="page-item" th:if="${pageMaker.next && param.query!=null && param.content!=null}">-->
+<!--                    <a class="page-link" th:href="@{/board(pageNum=${pageMaker.cri.pageNum + 1}, amount=${pageMaker.cri.amount}, query=${param.query}, content=${param.content})}" th:text="'다음'">다음</a>-->
+<!--                </li>-->
 
-            </ul>
-        </div>
-    </div>
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 
 

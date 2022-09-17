@@ -1,9 +1,10 @@
 package my.board.service.interfaces;
 
-import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
+import my.board.domain.BoardUpdateDto;
 import my.board.domain.Criteria;
 import my.board.domain.Search;
+import my.board.domain.jpaDomain.Board;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface BoardService {
 
     public List<Board> getBoardList(Criteria cri);
 
-    public int getTotal();
+    public Long getTotal();
     
     /*2022-08-25 아이디어
     * 클라이언트쪽에서 설정을 할 수 있도록 하자 3, 5, 10개
@@ -26,15 +27,15 @@ public interface BoardService {
     * */
     public List<Board> getBoardListTen();
 
-    public Board getBoardById(int id);
+    public Board getBoardById(Long id);
 
-    public void insertBoard(Board board);
+    public void insertBoard(String memberId, BoardRegisterDTO registerDTO);
 
-    public void updateBoard(Board board);
+    public void updateBoard(Long boardId, BoardUpdateDto updateDto);
 
-    public void deleteBoard(int id);
+    public void updateHit(Long boardId);
 
-    public void updateHit(Board board);
+    public void deleteBoard(Long id);
 
     public List<Board> searchBoard(Criteria cri, Search search);
 

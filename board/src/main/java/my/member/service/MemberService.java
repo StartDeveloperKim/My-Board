@@ -1,9 +1,9 @@
 package my.member.service;
 
-import my.member.domain.Member;
 import my.member.domain.MemberChangeNicknameDto;
 import my.member.domain.MemberChangePwDto;
 import my.member.domain.MemberLoginDto;
+import my.member.domain.jpaDomain.Member;
 
 public interface MemberService {
 
@@ -15,7 +15,7 @@ public interface MemberService {
 
     public boolean checkId(String id);
 
-    public int updatePassword(String userId, MemberChangePwDto changePwDto);
+    public void updatePassword(String userId, MemberChangePwDto changePwDto);
 
-    public int updateNickname(String userId, MemberChangeNicknameDto changeNicknameDto);
+    public void updateNickname(String userId, MemberChangeNicknameDto changeNicknameDto);
 }

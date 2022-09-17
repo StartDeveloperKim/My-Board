@@ -3,27 +3,24 @@ package my.member.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.member.SessionConst;
-import my.member.domain.Member;
 import my.member.domain.MemberChangeNicknameDto;
 import my.member.domain.MemberChangePwDto;
+import my.member.domain.jpaDomain.Member;
 import my.member.service.MemberService;
-import my.member.validator.PasswordValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-//@Controller
+@Controller
 @Slf4j
 @RequiredArgsConstructor
-@Controller
 @RequestMapping("/member")
 public class MemberInfoChangeController {
 
@@ -69,13 +66,16 @@ public class MemberInfoChangeController {
             return "/member/changePwForm";
         }
 
-        if (memberService.updatePassword(userId, changePwDto) == 1) {
+        try{
+            memberService.updatePassword(userId, changePwDto);
             redirectAttributes.addAttribute("changeStatus", true);
-            ChangeSessionInfo(changePwDto.getPassword(), "password", request);
+            //ChangeSessionInfo(changePwDto.getPassword(), "password", request);
             return "redirect:/tw";
-        } // 나중에 오류 처리를 하자
+        } catch (Exception e){
+            log.info("비밀번호 변경에 실패하였다.");
+            return "/welcome";
+        }
 
-        return "/welcome";
     }
 
     @PostMapping("/{userId}/nickname")
@@ -90,26 +90,27 @@ public class MemberInfoChangeController {
 
         log.info("닉네임변경={}", changeNicknameDto.toString());
 
-        if (memberService.updateNickname(userId, changeNicknameDto) == 1) {
+        try {
+            memberService.updateNickname(userId, changeNicknameDto);
             redirectAttributes.addAttribute("changeStatus", true);
-            ChangeSessionInfo(changeNicknameDto.getNickname(), "nickname", request);
+            //ChangeSessionInfo(changeNicknameDto.getNickname(), "nickname", request);
             return "redirect:/tw";
-        } // 나중에 오류 처리를 하자
-
-        return "/welcome";
-    }
-
-    private void ChangeSessionInfo(String info, String infoName, HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-            if (infoName.equals("nickname")) {
-                member.setNickname(info);
-            } else if (infoName.equals("password")) {
-                member.setPassword(info);
-            }
-            session.setAttribute(SessionConst.LOGIN_MEMBER, member);
+        } catch (Exception e) {
+            return "/welcome";
         }
-
     }
+
+//    private void ChangeSessionInfo(String info, String infoName, HttpServletRequest request) {
+//        HttpSession session = request.getSession(false);
+//        if (session != null) {
+//            Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+//            if (infoName.equals("nickname")) {
+//                member.setNickname(info);
+//            } else if (infoName.equals("password")) {
+//                member.setPassword(info);
+//            }
+//            session.setAttribute(SessionConst.LOGIN_MEMBER, member);
+//        }
+//
+//    }
 }

@@ -3,10 +3,10 @@ package my.board.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.board.domain.*;
+import my.board.domain.jpaDomain.Board;
 import my.board.service.interfaces.BoardService;
 import my.member.SessionConst;
-import my.member.domain.Member;
-import org.apache.el.parser.BooleanNode;
+import my.member.domain.jpaDomain.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Map;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,19 +29,21 @@ public class BoardController {
      * */
     @GetMapping
     public String getBoardList(Criteria cri,
-                               @ModelAttribute Search search,
+                               //@Validated @ModelAttribute Search search,
+                               BindingResult bindingResult,
                                Model model) {
-        log.info("query:{}, content:{}", search.getQuery(), search.getContent());
-        if (search.getQuery() != null && search.getContent() != null) {
-            // 검색어에 대한 list를 받아오는 로직을 실행
-            model.addAttribute("list", boardService.searchBoard(cri, search));
-            log.info("검색시 글 개수: {}", boardService.getTotalAtSearchBoard(search));
-            model.addAttribute("pageMaker", new Page(cri, boardService.getTotalAtSearchBoard(search)));
+        if (bindingResult.hasErrors()) {
+            return "/board/list";
         }
-        else{
-            model.addAttribute("list", boardService.getBoardList(cri));
-            model.addAttribute("pageMaker", new Page(cri, boardService.getTotal()));
-        }
+
+//        if (search.getQuery() != null && search.getContent() != null) {
+//            // 검색어에 대한 list를 받아오는 로직을 실행
+//            model.addAttribute("list", boardService.searchBoard(cri, search));
+//            model.addAttribute("pageMaker", new Page(cri, boardService.getTotalAtSearchBoard(search)));
+//        }
+        model.addAttribute("list", boardService.getBoardList(cri));
+        //model.addAttribute("pageMaker", new Page(cri, boardService.getTotal()));
+
         //log.info("/board -> cri = {}", cri.toString());
         return "/board/list";
     }
@@ -52,13 +54,12 @@ public class BoardController {
      * 해당 id의 글의 hit를 가져온다 -> +1 연산을 한 뒤에 업데이트 한다.
      * */
     @GetMapping("/{id}")
-    public String getBoard(@PathVariable int id, Model model,
+    public String getBoard(@PathVariable Long id, Model model,
                            @RequestParam(required = false, defaultValue = "false") String status) {
         Board board = boardService.getBoardById(id);
 
-        log.info("status = {}", status);
         if (status.equals("true")) {
-            boardService.updateHit(board); // 조회수 서비스
+            boardService.updateHit(id); // 조회수 증가
         }
 
         model.addAttribute("board", board);
@@ -89,7 +90,8 @@ public class BoardController {
      * URL(POST) : /board/new
      * */
     @PostMapping("/new")
-    public String postBoard(@Validated @ModelAttribute("board") BoardRegisterDTO registerDTO, BindingResult bindingResult,
+    public String postBoard(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
+            @Validated @ModelAttribute("board") BoardRegisterDTO registerDTO, BindingResult bindingResult,
                             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
@@ -97,9 +99,9 @@ public class BoardController {
             return "/board/regist";
         }
 
-        Board board = new Board(registerDTO.getTitle(), registerDTO.getContent(), registerDTO.getNickname());
+        //Board board = new Board(registerDTO.getTitle(), registerDTO.getContent(), registerDTO.getNickname());
 
-        boardService.insertBoard(board);
+        boardService.insertBoard(loginMember.getId(), registerDTO);
         redirectAttributes.addAttribute("status", true);
         //log.info("/board/new --> POST, BoardRegisterDTO : {}", board.toString());
         return "redirect:/board";
@@ -109,7 +111,7 @@ public class BoardController {
      * URL(GET) : /board/{id}/edit
      * */
     @GetMapping("/{id}/edit")
-    public String updateBoard_form(@PathVariable int id, Model model) {
+    public String updateBoard_form(@PathVariable Long id, Model model) {
         log.info("id={}", id);
 
         model.addAttribute("board", boardService.getBoardById(id));
@@ -121,14 +123,14 @@ public class BoardController {
      * 수정버튼 누르면 detail page로 redirect
      * */
     @PostMapping("/{id}/edit")
-    public String updateBoard(@PathVariable int id, Criteria cri, @Validated Board board, BindingResult bindingResult) {
-        log.info("updateBoard = {}", board.toString());
+    public String updateBoard(@PathVariable Long id, Criteria cri, @Validated BoardUpdateDto updateDto, BindingResult bindingResult) {
+        log.info("updateBoard = {}", updateDto.toString());
 
         if (bindingResult.hasErrors()) {
             return "/board/edit";
         }
 
-        boardService.updateBoard(board);
+        boardService.updateBoard(id, updateDto);
         return "redirect:/board/{id}?pageNum=" + cri.getPageNum() +"&amount=" + cri.getAmount();
     }
 
@@ -138,7 +140,7 @@ public class BoardController {
     * 어떻게 해야할지 방법을 찾아보자
     * */
     @GetMapping("/{id}/delete")
-    public String deleteBoard(@PathVariable int id, Criteria cri) {
+    public String deleteBoard(@PathVariable Long id, Criteria cri) {
         boardService.deleteBoard(id);
         return "redirect:/board?pageNum=" + cri.getPageNum() +"&amount=" + cri.getAmount();
     }

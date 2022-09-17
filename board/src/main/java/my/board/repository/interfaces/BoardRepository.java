@@ -1,9 +1,9 @@
 package my.board.repository.interfaces;
 
-import my.board.domain.Board;
 import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
 import my.board.domain.Search;
+import my.board.domain.jpaDomain.Board;
 
 import java.util.List;
 
@@ -22,20 +22,15 @@ public interface BoardRepository {
     public List<Board> selectBoardTen();
 
     /*상세 보여주기*/
-    public Board selectById(int id);
+    public Board selectById(Long id);
 
     /*글 등록*/
     public void insertBoard(Board board);
 
-    /*글 수정*/
-    public void updateBoard(Board board);
-
     /*글 삭제*/
-    public void deleteBoard(int id);
+    public void deleteBoard(Long id);
 
-    public int getTotal();
-
-    public void updateHit(Board board);
+    public Long getTotal();
 
     /*검색후 반환*/
     public List<Board> searchBoard(Criteria cri, Search search);

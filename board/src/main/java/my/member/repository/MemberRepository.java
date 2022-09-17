@@ -1,7 +1,7 @@
 package my.member.repository;
 
-import my.member.domain.Member;
 import my.member.domain.MemberLoginDto;
+import my.member.domain.jpaDomain.Member;
 
 public interface MemberRepository {
 
@@ -11,8 +11,7 @@ public interface MemberRepository {
 
     public Member selectById(String id);
 
-    public int updatePassword(Member member);
-
-    public int updateNickname(Member member);
+//    public int updatePassword(Member member);
+//    public int updateNickname(Member member);
 
 }
