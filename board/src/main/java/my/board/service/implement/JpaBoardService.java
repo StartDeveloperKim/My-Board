@@ -34,21 +34,23 @@ public class JpaBoardService implements BoardService {
     }
 
     @Override
+    @Transactional
     public void updateBoard(Long boardId, BoardUpdateDto updateDto) {
         Board board = boardRepository.selectById(boardId);
         board.update(updateDto);
     }
 
     @Override
+    @Transactional
     public void updateHit(Long boardId) {
         Board board = boardRepository.selectById(boardId);
         board.plusHit(); // 조회수 1증가, 변경 감지를 통한 update
     }
 
     @Override
-    public List<Board> getBoardList(Criteria cri) {
+    public List<Board> getBoardList() {
         //JPA를 통해 페이지구현을 해보자, 페이징 인터페이스가 있었다.
-        return boardRepository.selectBoard(cri);
+        return boardRepository.selectBoard();
     }
 
     @Override
@@ -75,7 +77,7 @@ public class JpaBoardService implements BoardService {
 
     /*검색기능은 JPA를 좀 더 공부하고 구현해보자*/
     @Override
-    public List<Board> searchBoard(Criteria cri, Search search) {
+    public List<Board> searchBoard(Search search) {
         return null;
     }
 

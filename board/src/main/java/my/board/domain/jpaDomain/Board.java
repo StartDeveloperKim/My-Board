@@ -7,6 +7,7 @@ import my.board.domain.BoardRegisterDTO;
 import my.board.domain.BoardUpdateDto;
 import my.member.domain.jpaDomain.Member;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,7 +39,10 @@ public class Board {
     private int hit;
 
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime regdate;
+
+    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime updatedate;
 
     public Board(String title, String content) {

@@ -4,6 +4,8 @@ import my.board.domain.BoardRegisterDTO;
 import my.board.domain.Criteria;
 import my.board.domain.Search;
 import my.board.domain.jpaDomain.Board;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,7 +18,10 @@ import java.util.List;
 public interface BoardRepository {
 
     /*리스트로 보여주기*/
-    public List<Board> selectBoard(Criteria cri);
+    public List<Board> selectBoard();
+
+    /*페이지 리스트로 보여주기*/
+    public List<Board> selectBoardUsingPaging(Pageable pageable);
 
     /*글 리스트 10개 가져오기 최신순으로*/
     public List<Board> selectBoardTen();
@@ -33,7 +38,7 @@ public interface BoardRepository {
     public Long getTotal();
 
     /*검색후 반환*/
-    public List<Board> searchBoard(Criteria cri, Search search);
+    public List<Board> searchBoard(Search search);
 
     /*검색 결과에 대한 반환값 개수*/
     public int searchBoardGetTotal(Search search);

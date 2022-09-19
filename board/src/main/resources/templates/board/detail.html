@@ -33,7 +33,7 @@
 
 <div class="container p-5 my-5 bg-dark text-white">
     <h2><b th:text="${board.title}">오류오류</b></h2>
-    <p th:text="${board.nickname} + '님'">오류오류</p>
+    <p th:text="${board.member.nickname} + '님'">오류오류</p>
 </div>
 
 <div class="container">
@@ -47,15 +47,17 @@
     </div>
     <div class="mb-3 mt-3">
         <label for="nickname" class="form-label">작성자 닉네임:</label>
-        <input type="text" class="form-control" id="nickname" name="nickname" readonly th:value="${board.nickname}">
+        <input type="text" class="form-control" id="nickname" name="nickname" readonly th:value="${board.member.nickname}">
     </div>
     <hr>
     <!--<button type="button" class="btn btn-outline-primary"
             onclick="location.href='/board/${board.id}/edit?pageNum=${param.pageNum}&amount=${param.amount}'">수정하기</button>-->
-    <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{/board/{id}/edit(id=${board.id}, pageNum=${param.pageNum}, amount=${param.amount})}'|">수정하기</button>
+    <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{/board/{id}/edit(id=${board.id})}'|">수정하기</button>
     <!--<button type="button" class="btn btn-outline-dark"
             onclick="location.href='/board?pageNum=${param.pageNum}&amount=${param.amount}'">목록으로</button>-->
-    <button type="button" class="btn btn-outline-dark" th:onclick="|location.href='@{/board(pageNum=${param.pageNum}, amount=${param.amount})}'|">목록으로</button>
+    <form action="/board" method="get">
+        <button type="submit" class="btn btn-outline-dark">목록으로</button>
+    </form>
 </div>
 
 <div class="mt-5 p-4 bg-dark text-white text-center">

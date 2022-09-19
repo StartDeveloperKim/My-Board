@@ -2,10 +2,10 @@ package my.board.repository.implement;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import my.board.domain.Criteria;
 import my.board.domain.Search;
 import my.board.domain.jpaDomain.Board;
 import my.board.repository.interfaces.BoardRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -29,8 +29,15 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public List<Board> selectBoard(Criteria cri) {
+    public List<Board> selectBoard() {
         return em.createQuery("select b from Board b", Board.class)
+                .getResultList();
+    }
+
+    @Override
+    public List<Board> selectBoardUsingPaging(Pageable pageable) {
+        return em.createQuery("select b from Board b order by b.regdate desc ", Board.class)
+                .setMaxResults(10)
                 .getResultList();
     }
 
@@ -43,8 +50,10 @@ public class JpaBoardRepository implements BoardRepository {
 
     @Override
     public void deleteBoard(Long id) {
-        em.createQuery("delete from Board b where b.id = :id", Board.class)
-                .setParameter("id", id);
+        log.info("em.createQuery: deleteBoard");
+        em.createQuery("delete from Board b where b.id = :id")
+                .setParameter("id", id)
+                .executeUpdate(); // delete문을 사용하려면 필요함
     }
 
     @Override
@@ -54,7 +63,7 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public List<Board> searchBoard(Criteria cri, Search search) {
+    public List<Board> searchBoard(Search search) {
         return null;
     }
 

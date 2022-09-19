@@ -34,11 +34,11 @@
 
 <div class="container p-5 my-5 bg-dark text-white">
     <h2><b th:text="${board.title} + ' 수정'"></b></h2>
-    <p th:text="${board.nickname} + '님 '">오류오류</p>
+    <p th:text="${board.member.nickname} + '님 '">오류오류</p>
 </div>
 
 <div class="container">
-    <form action="list.html" th:action="@{/board/{id}/edit(id=${board.id}, pageNum=${param.pageNum}, amount=${param.amount})}" method="POST" th:object="${board}">
+    <form action="list.html" th:action="@{/board/{id}/edit(id=${board.id})}" method="POST" th:object="${board}">
         <div th:if="${#fields.hasGlobalErrors()}">
             <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
         </div>
@@ -54,14 +54,14 @@
         </div>
         <div class="mb-3 mt-3">
             <label for="nickname" class="form-label">작성자 닉네임:</label>
-            <input type="text" class="form-control" id="nickname" th:field="*{nickname}" readonly>
+            <input type="text" class="form-control" id="nickname" th:field="*{member.nickname}" readonly>
         </div>
         <hr>
         <button type="submit" class="btn btn-outline-primary" th:onclick="editCheck()">수정하기</button>
         <button type="button" class="btn btn-outline-danger"
-                th:onclick="|location.href='@{/board/{id}/delete(id=${board.id}, pageNum=${param.pageNum}, amouont=${param.amount})}'|">삭제하기</button>
+                th:onclick="|location.href='@{/board/{id}/delete(id=${board.id})}'|">삭제하기</button>
         <button type="button" class="btn btn-outline-dark"
-                th:onclick="|location.href='@{/board/{id}(id=${board.id}, pageNum=${param.pageNum}, amount=${param.amount})}'|">취소하기</button>
+                th:onclick="|location.href='@{/board/{id}(id=${board.id})}'|">취소하기</button>
     </form>
 
 </div>

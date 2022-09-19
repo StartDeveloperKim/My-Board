@@ -7,6 +7,7 @@ import my.board.domain.jpaDomain.Board;
 import my.board.service.interfaces.BoardService;
 import my.member.SessionConst;
 import my.member.domain.jpaDomain.Member;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,23 +29,10 @@ public class BoardController {
      * URL(GET) : /board
      * */
     @GetMapping
-    public String getBoardList(Criteria cri,
-                               //@Validated @ModelAttribute Search search,
-                               BindingResult bindingResult,
-                               Model model) {
-        if (bindingResult.hasErrors()) {
-            return "/board/list";
-        }
+    public String getBoardList(Model model, Pageable pageable) {
 
-//        if (search.getQuery() != null && search.getContent() != null) {
-//            // 검색어에 대한 list를 받아오는 로직을 실행
-//            model.addAttribute("list", boardService.searchBoard(cri, search));
-//            model.addAttribute("pageMaker", new Page(cri, boardService.getTotalAtSearchBoard(search)));
-//        }
-        model.addAttribute("list", boardService.getBoardList(cri));
-        //model.addAttribute("pageMaker", new Page(cri, boardService.getTotal()));
+        model.addAttribute("list", boardService.getBoardList());
 
-        //log.info("/board -> cri = {}", cri.toString());
         return "/board/list";
     }
 
@@ -123,7 +111,7 @@ public class BoardController {
      * 수정버튼 누르면 detail page로 redirect
      * */
     @PostMapping("/{id}/edit")
-    public String updateBoard(@PathVariable Long id, Criteria cri, @Validated BoardUpdateDto updateDto, BindingResult bindingResult) {
+    public String updateBoard(@PathVariable Long id, @Validated BoardUpdateDto updateDto, BindingResult bindingResult) {
         log.info("updateBoard = {}", updateDto.toString());
 
         if (bindingResult.hasErrors()) {
@@ -131,7 +119,7 @@ public class BoardController {
         }
 
         boardService.updateBoard(id, updateDto);
-        return "redirect:/board/{id}?pageNum=" + cri.getPageNum() +"&amount=" + cri.getAmount();
+        return "redirect:/board/{id}";
     }
 
     /**글 삭제 POST
@@ -140,8 +128,9 @@ public class BoardController {
     * 어떻게 해야할지 방법을 찾아보자
     * */
     @GetMapping("/{id}/delete")
-    public String deleteBoard(@PathVariable Long id, Criteria cri) {
+    public String deleteBoard(@PathVariable Long id) {
+        log.info("deleteBoard");
         boardService.deleteBoard(id);
-        return "redirect:/board?pageNum=" + cri.getPageNum() +"&amount=" + cri.getAmount();
+        return "redirect:/board";
     }
 }

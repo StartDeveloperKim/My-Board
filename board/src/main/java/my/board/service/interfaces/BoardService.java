@@ -17,7 +17,7 @@ import java.util.List;
 * */
 public interface BoardService {
 
-    public List<Board> getBoardList(Criteria cri);
+    public List<Board> getBoardList();
 
     public Long getTotal();
     
@@ -37,7 +37,7 @@ public interface BoardService {
 
     public void deleteBoard(Long id);
 
-    public List<Board> searchBoard(Criteria cri, Search search);
+    public List<Board> searchBoard(Search search);
 
     public int getTotalAtSearchBoard(Search search);
 }
