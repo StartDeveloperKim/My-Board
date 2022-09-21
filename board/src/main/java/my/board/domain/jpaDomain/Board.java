@@ -7,6 +7,7 @@ import my.board.domain.BoardRegisterDTO;
 import my.board.domain.BoardUpdateDto;
 import my.member.domain.jpaDomain.Member;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -30,7 +31,7 @@ public class Board {
     @Column(name = "CONTENT", nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -39,10 +40,12 @@ public class Board {
     private int hit;
 
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
+//    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
+    @LastModifiedDate
     private LocalDateTime regdate;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
+//    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
+    @LastModifiedDate
     private LocalDateTime updatedate;
 
     public Board(String title, String content) {
