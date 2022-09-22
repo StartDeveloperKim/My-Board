@@ -20,7 +20,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public List<Board> findAll() {
-        return em.createQuery("select b from Board b", Board.class)
+        return em.createQuery("select b from Board b order by b.regDate desc ", Board.class)
                 .getResultList();
     }
 

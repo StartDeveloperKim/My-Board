@@ -6,11 +6,20 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@SequenceGenerator(
+        name = "REPLY_SEQ_GEN",
+        sequenceName = "REPLY_SEQ",
+        initialValue = 1,
+        allocationSize = 1
+)
 @Getter
 public class Reply {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "REPLY_SEQ_GEN"
+    )
     @Column(name = "reply_id")
     private Long id;
 

@@ -11,11 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@SequenceGenerator(
+        name = "MEMBER_SEQ_GEN",
+        sequenceName = "MEMBER_SEQ",
+        initialValue = 1,
+        allocationSize = 1
+)
 @Getter
 public class Member {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "MEMBER_SEQ_GEN"
+    )
     @Column(name = "member_id")
     private Long member_id;
 
@@ -40,6 +49,10 @@ public class Member {
         this.password = password;
         this.nickname = nickname;
         this.createDate = createDate;
+    }
+
+    public Member() {
+
     }
 
     //==생성 메서드==//

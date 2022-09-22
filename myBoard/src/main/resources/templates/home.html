@@ -13,16 +13,22 @@
         <ul class="nav nav-pills pull-right">
             <li><a href="/">홈 화면</a></li>
         </ul>
+        <a href="/"><h3 class="text-muted">아무거나 게시판</h3></a>
     </div>
     <div class="jumbotron">
         <h1><b>아무거나 게시판</b></h1>
-        <p>
-            <a class="btn btn-lg btn-outline-primary" href="/member/new">회원가입</a>
+        <p th:if="${loginMember == null}">
+            <a class="btn btn-lg btn-outline-primary" href="/member">회원가입</a>
             <a class="btn btn-lg btn-outline-primary" href="/login">로그인</a>
         </p>
-        <p>
-            <a class="btn btn-lg btn-outline-success" href="/board">게시판</a>
-        </p>
+        <div th:if="${loginMember != null}">
+            <h3 class="text-black-50">환영합니다!!</h3>
+            <form method="post" action="/logout">
+                <button type="submit" class="btn btn-lg btn-outline-danger">로그아웃</button>
+            </form>
+            <hr class="my-3">
+            <p><a class="btn btn-lg btn-outline-success" href="/board">게시판</a></p>
+        </div>
     </div>
     <hr class="my-4">
 </div>

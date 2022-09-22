@@ -19,12 +19,23 @@ public class MemberRepositoryImpl implements MemberRepository{
 
     @Override
     public Member findById(String id) {
-        return em.find(Member.class, id);
+        try {
+            return em.createQuery("select m from Member m where m.id = :id", Member.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (Exception e) {
+            // getSingleResult 는 반환값이 정확히 하나가 아니라면 예외가 발생한다.
+            // 값이 없다면 null 이기에 예외가 발생 -> try-catch로 잡아야함
+            return null;
+        }
+
     }
 
     @Override
     public Member findByNickname(String nickname) {
-        return em.find(Member.class, nickname);
+        return em.createQuery("select m from Member m where m.nickname = :nickname", Member.class)
+                .setParameter("nickname", nickname)
+                .getSingleResult();
     }
 
     @Override

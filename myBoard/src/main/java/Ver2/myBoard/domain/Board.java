@@ -6,17 +6,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@SequenceGenerator(
+        name = "BOARD_SEQ_GEN",
+        sequenceName = "BOARD_SEQ",
+        initialValue = 1,
+        allocationSize = 1
+)
 @Getter
 @NoArgsConstructor
 public class Board {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "BOARD_SEQ_GEN"
+    )
     @Column(name = "board_id")
     private Long id;
 
@@ -24,6 +35,7 @@ public class Board {
     private String title;
 
     @Column(name = "content", nullable = false)
+    @Lob
     private String content;
 
     @Column(name = "writer")
@@ -33,9 +45,9 @@ public class Board {
     private int hit;
 
     @Column(nullable = false)
-    private LocalDateTime regDate;
+    private String regDate;
 
-    private LocalDateTime updateDate;
+    private String updateDate = "-";
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
@@ -52,7 +64,7 @@ public class Board {
     }
 
     //==생성자==//
-    public Board(String title, String content, String writer, int hit, LocalDateTime regDate) {
+    public Board(String title, String content, String writer, int hit, String regDate) {
         this.title = title;
         this.content = content;
         this.writer = writer;
@@ -63,7 +75,7 @@ public class Board {
     //==생성 메서드==//
     public static Board createBoard(Member member, BoardRegisterDto registerDto) {
         Board board = new Board(registerDto.getTitle(), registerDto.getContent(),
-                registerDto.getNickname(), 0, LocalDateTime.now());
+                registerDto.getNickname(), 0, Board.makeRecentTime());
         board.setMember(member);
         return board;
     }
@@ -72,6 +84,10 @@ public class Board {
     public void updateBoard(BoardUpdateDto updateDto) {
         this.title = updateDto.getTitle();
         this.content = updateDto.getContent();
-        this.updateDate = LocalDateTime.now(); // 수정 날짜 업데이트
+        this.updateDate = Board.makeRecentTime(); // 수정 날짜 업데이트
+    }
+
+    public static String makeRecentTime() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
     }
 }
