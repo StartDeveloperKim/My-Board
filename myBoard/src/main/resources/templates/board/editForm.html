@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="/resources/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/jumbotron-narrow.css" rel="stylesheet">
+    <title>수정하기</title>
+    <style>
+      .fieldError {
+        border-color: #dc3545;
+        color: #dc3545;
+      }
+    </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <ul class="nav nav-pills pull-right">
+      <li><a href="/">홈 화면</a></li>
+    </ul>
+    <a href="/"><h3 class="text-muted">아무거나 게시판</h3></a>
+  </div>
+
+  <form id="editForm" th:action="@{/board/{id}/edit(id=${updateBoard.id})}" th:object="${updateBoard}" method="post">
+    <div>
+      <button  type="submit" class="btn btn-outline-primary my-2">수정하기</button>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="title">제목</label>
+          <input type="text" id="title" th:field="*{title}" class="form-control" th:errorclass="fieldError">
+          <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="fieldError"></p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="nickname">작성자</label>
+          <input type="text" id="nickname" th:value="${nickname}" class="form-control" readonly>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="content">본문</label>
+      <textarea type="text" id="content" th:field="*{content}" class="form-control" rows="4" cols="120" th:errorclass="fieldError"></textarea>
+      <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" th:errorclass="fieldError"></p>
+    </div>
+  </form>
+  <button type="button" class="btn btn-outline-dark my-2" th:onclick="|location.href='@{/board}'|">목록</button>
+  <hr class="my-5">
+</div>
+<script type="text/javascript">
+  document.getElementById("editForm").onsubmit = function () {
+    let confirmCheck=confirm("업데이트를 진행하시겠습니까?");
+    if (!confirmCheck) {
+      return false;
+    }
+  };
+</script>
+</body>
+</html>

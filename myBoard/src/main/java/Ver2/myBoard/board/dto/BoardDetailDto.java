@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BoardDetailDto {
 
+    private Long id;
     private String title;
     private String content;
     private String writer;

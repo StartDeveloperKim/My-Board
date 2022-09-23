@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,13 +29,15 @@ public class BoardRegisterController {
     }
 
     @PostMapping("/new")
-    public String BoardRegister(@Validated @ModelAttribute("board") BoardRegisterDto registerDto, BindingResult bindingResult) {
+    public String BoardRegister(@Validated @ModelAttribute("board") BoardRegisterDto registerDto, BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             return "board/registerForm";
         }
 
         boardService.insertBoard(registerDto);
+        redirectAttributes.addFlashAttribute("registerStatus", true);
         return "redirect:/board";
     }
 }

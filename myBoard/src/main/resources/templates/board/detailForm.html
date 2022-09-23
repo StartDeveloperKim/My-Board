@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+        href="/resources/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/jumbotron-narrow.css" rel="stylesheet">
+    <title th:text="${board.title}"></title>
+    <style>
+    .fieldError {
+      border-color: #dc3545;
+      color: #dc3545;
+    }
+    </style>
+</head>
+<body>
+<div th:if="${updateStatus}">
+  <script>
+    alert("업데이트에 성공하였습니다.")
+  </script>
+</div>
+<div class="container">
+  <div class="header">
+    <ul class="nav nav-pills pull-right">
+      <li><a href="/">홈 화면</a></li>
+    </ul>
+    <a href="/"><h3 class="text-muted">아무거나 게시판</h3></a>
+  </div>
+  <div th:if="${status}">
+<!--    <a id="removeBtn" class="btn btn-outline-danger my-2" th:href="@{/board/{id}/remove(id=${board.id})}">삭제</a>-->
+    <form id="removeForm" th:action="@{/board/{id}/remove(id=${board.id})}" method="post">
+      <a class="btn btn-outline-primary my-2" th:href="@{/board/{id}/edit(id=${board.id})}">수정</a>
+      <button type="submit" class="btn btn-outline-danger my-2">삭제</button>
+    </form>
+  </div>
+  <div th:if="${NotMatching}">
+    <p class="fieldError">다른 유저의 게시물에는 접근할 수 없습니다.</p>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <label for="title">제목</label>
+        <input type="text" id="title" th:value="${board.title}" class="form-control" readonly>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <label for="nickname">작성자</label>
+        <input type="text" id="nickname" th:value="${board.writer}" class="form-control" readonly>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="content">본문</label>
+    <!--나중에 파일업로드 기능을 만들고 이를 image 태그로 보여줄 수 있도록 하자-->
+    <textarea type="text" id="content" th:text="${board.content}" class="form-control"  rows="4" cols="120" readonly></textarea>
+  </div>
+  <a class="btn btn-outline-dark my-2" th:href="@{/board}">목록</a>
+  <hr class="my-5">
+</div>
+<script type="text/javascript">
+  document.getElementById("removeForm").onsubmit = function () {
+    let removeCheck = confirm("정말 글 삭제할거야?");
+    if (!removeCheck) {
+      return false;
+    }
+  };
+</script>
+</body>
+</html>

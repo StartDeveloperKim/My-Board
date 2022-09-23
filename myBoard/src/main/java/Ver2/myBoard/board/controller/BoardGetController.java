@@ -4,15 +4,24 @@ import Ver2.myBoard.board.dto.BoardDetailDto;
 import Ver2.myBoard.board.dto.BoardListDto;
 import Ver2.myBoard.board.service.BoardService;
 import Ver2.myBoard.domain.Board;
+import Ver2.myBoard.domain.Member;
+import Ver2.myBoard.member.SessionConst;
+import Ver2.myBoard.member.dto.MemberLoginDto;
+import Ver2.myBoard.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -22,6 +31,7 @@ import java.util.stream.Collectors;
 public class BoardGetController {
 
     private final BoardService boardService;
+    private final MemberService memberService;
 
     @GetMapping
     public String boardForm(Model model) {
@@ -41,13 +51,30 @@ public class BoardGetController {
     }
 
     @GetMapping("/{id}")
-    public String boardDetail(@PathVariable("id") Long id, Model model) {
+    public String boardDetail(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberLoginDto loginDto,
+                              @PathVariable("id") Long id, Model model,
+                              RedirectAttributes redirectAttributes) {
+        Member member = memberService.getMemberById(loginDto.getId());
         Board findBoard = boardService.getBoardById(id);
-        BoardDetailDto boardDetailDto = new BoardDetailDto(findBoard.getTitle(), findBoard.getContent(), findBoard.getWriter(), findBoard.getComments());
+        
+        // 업데이트 성공 또는 redirect 되었을 때 addFlashAttribute를 하는데 이 경우에는 해당 공간이 비어있지 않기때문
+        if (redirectAttributes.getFlashAttributes().isEmpty()) {
+            log.info("조회수 증가, {}", redirectAttributes.getFlashAttributes().isEmpty());
+            // 오류가 났을 때도 올라가고 있다 --> 원인을 찾자!!!
+            boardService.updateHit(findBoard); // 조회수 증가
+        }
+        
+        /*해당글의 작성자와 로그인한 멤버가 동일 인물인지 확인하는 것*/
+        if (findBoard.checkMemberEquals(member)) {
+            model.addAttribute("status", true);
+        } else {
+            model.addAttribute("status", false);
+        }
 
+        BoardDetailDto boardDetailDto = new BoardDetailDto(findBoard.getId(), findBoard.getTitle(), findBoard.getContent(), findBoard.getWriter(), findBoard.getComments());
         model.addAttribute("board", boardDetailDto);
 
-        return null;
+        return "board/detailForm";
     }
 
 

@@ -90,4 +90,12 @@ public class Board {
     public static String makeRecentTime() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
     }
+
+    public boolean checkMemberEquals(Member member) {
+        return this.member == member;
+    }
+
+    public void updateHit() {
+        this.hit += 1;
+    }
 }

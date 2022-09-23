@@ -7,12 +7,14 @@ import Ver2.myBoard.domain.Board;
 import Ver2.myBoard.domain.Member;
 import Ver2.myBoard.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 // readOnly 설정은 select 쿼리에 있어서는 최적화가 일어난다.
@@ -44,8 +46,10 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void updateBoard(Long id, BoardUpdateDto updateDto) {
-        Board board = boardRepository.findById(id);
-        board.updateBoard(updateDto); // 변경감지로 영속성 컨텍스트에서 영속 데이터의 변경이 감지되면 업데이트 된다.
+        Board board = boardRepository.findById(id); // -> 영속상태의 Entity
+        log.info("Before update {}, {}", board.getTitle(), board.getContent());
+        board.updateBoard(updateDto); // Entity의 내용을 변경 -> @Transactional 어노테이션으로인해 커밋이 발생
+        log.info("After update {}, {}", board.getTitle(), board.getContent());
         // Dirty Checking 은 제대로 공부하자...
     }
 
@@ -53,5 +57,11 @@ public class BoardServiceImpl implements BoardService{
     @Transactional
     public void removeBoard(Long id) {
         boardRepository.remove(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateHit(Board board) {
+        board.updateHit();
     }
 }
