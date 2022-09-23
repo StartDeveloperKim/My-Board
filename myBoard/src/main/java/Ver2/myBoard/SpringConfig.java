@@ -15,7 +15,7 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/member/new", "/member", "/login", "/logout",
+                .excludePathPatterns("/", "/member/new", "/member", "/login", "/logout", "/reply/new",
                         "/css/**", "/*.ico", "/error");
     }
 }

@@ -1,9 +1,11 @@
 package Ver2.myBoard.domain;
 
+import Ver2.myBoard.reply.dto.ReplyRegisterDto;
 import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @SequenceGenerator(
@@ -27,7 +29,7 @@ public class Reply {
     private String comment;
 
     @Column(name = "register_date")
-    private LocalDateTime regDate;
+    private String regDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "board_id")
@@ -36,6 +38,24 @@ public class Reply {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member; // FK, 연관관계 주인
+
+
+    public Reply(String comment, String regDate) {
+        this.comment = comment;
+        this.regDate = regDate;
+    }
+
+    public Reply() {
+
+    }
+
+    //==생성메서드==//
+    public static Reply createReply(Member member, Board board, ReplyRegisterDto replyRegisterDto) {
+        Reply reply = new Reply(replyRegisterDto.getComment(), Reply.makeRecentTime());
+        reply.setBoard(board);
+        reply.setMember(member);
+        return reply;
+    }
     
     //==연관관계 편의 메서드==//
 
@@ -46,5 +66,10 @@ public class Reply {
 
     public void setMember(Member member) {
         this.member = member;
+        //member.getReplies().add(this);
+    }
+
+    public static String makeRecentTime() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
     }
 }
