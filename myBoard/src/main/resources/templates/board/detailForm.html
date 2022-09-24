@@ -5,6 +5,7 @@
     <link th:href="@{/css/bootstrap.min.css}"
         href="/resources/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/jumbotron-narrow.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <title th:text="${board.title}"></title>
     <style>
     .fieldError {
@@ -56,15 +57,132 @@
     <textarea type="text" id="content" th:text="${board.content}" class="form-control"  rows="4" cols="120" readonly></textarea>
   </div>
   <a class="btn btn-outline-dark my-2" th:href="@{/board}">목록</a>
-  <hr class="my-5">
+  <hr class="my-2">
+  <div id="comment_count"></div>
+  <hr class="my-2">
+  <div id="comments">
+    <div>
+      <span>작성자:
+        <input type="text" class="form-control" id="com_writer" placeholder="이름" name="com_writer" readonly>
+      </span>
+    </div>
+    <div>
+      <textarea class="preview-comment" id="com_content" cols="80" rows="2" name="com_content"></textarea>
+      <a id="delete"></a>
+    </div>
+  </div>
+  <h5><b>댓글</b></h5>
+  <textarea class="form-control form-control-sm" rows="3" cols="40" placeholder="댓글을 입력해주세요!!" id="commentBody"></textarea>
+  <button type="submit" class="btn-sm btn-outline-info my-2" id="registerReply">댓글등록</button>
+<!--  <button type="button" class="btn-sm btn-outline-primary my-2" id="showReply">댓글보기</button>-->
+
 </div>
-<script type="text/javascript">
-  document.getElementById("removeForm").onsubmit = function () {
-    let removeCheck = confirm("정말 글 삭제할거야?");
-    if (!removeCheck) {
-      return false;
+<script th:inline="javascript">
+  let removeStatus = [[${status}]]
+  if (removeStatus) {
+    document.getElementById("removeForm").onsubmit = function () {
+      let removeCheck = confirm("정말 글 삭제할거야?");
+      if (!removeCheck) {
+        return false;
+      }
+    };
+  }
+
+  function removeReply(comment_id) {
+    $.ajax({
+      type: 'POST',
+      async: false,
+      url: '/reply/' + comment_id + '/remove',
+      success: function (result) {
+        if (result === 'success') {
+          alert("댓글이 삭제되었습니다.");
+          getList();
+        } else {
+          alert("댓글 삭제에 실패함!!");
+        }
+      },
+    });
+  }
+
+  // 해당 문서가 켜지자마자 댓글리스트를 불러온다.
+  $(document).ready(function () {
+    getList();
+  });
+
+  // 댓글등록 버튼을 누르면 아래의 스펙으로 AJAX 통신을 실시
+  $('#registerReply').click(function () {
+    let comment = $('#commentBody').val();
+
+    if (comment !== '') {
+      $.ajax({
+        type:'POST',
+        async:false,
+        url:'/reply/new',
+        data: JSON.stringify({
+          comment : $('#commentBody').val(),
+          memberId : [[${memberId}]],
+          boardId : [[${board.id}]]
+        }),
+        contentType: 'application/json',
+        success: function (result) {
+          if (result === "success") {
+            console.log("댓글 등록 완료")
+            $('#com_writer').val([[${memberId}]])
+            $('#com_content').val(comment);
+            $('#commentBody').val('')
+            getList()
+          } else {
+            console.log("댓글 등록 실패");
+          }
+        },
+        error: function () {
+          alert('통신실패');
+        },
+      });
+    } else {
+      alert('댓글을 입력해주세요!!');
+      $('#commentBody').focus();
     }
-  };
+  });
+
+  // 댓글리스트를 불러온다.
+  function getList() {
+    let boardId = [[${board.id}]]
+
+    $.getJSON(
+            '/reply/show/' + boardId,
+            function (data) {
+              if (data.total > 0) {
+                let list = data.list;
+                let comment_html = "<div>";
+                let count = data.total;
+                let count_html = "<span>" + "댓글(" + count + ")" +"<span>";
+
+                $('#comment_count').html(count_html);
+                for (let i = 0; i < list.length; i++) {
+                  let comment_id = list[i].id;
+                  let comment = list[i].comment;
+                  let writer = list[i].nickname;
+                  let regDate = list[i].regDate;
+                  comment_html += "<div><span id='com_writer'><strong>" + writer;
+                  comment_html += "[" + regDate + "]" + "</strong></span><br/>";
+                  comment_html += "<span id='com-content'>" + comment + "</span><br>";
+                  if(writer === [[${memberNickname}]]){
+                    comment_html += "<a id='delete' style='color: red' href='javascript:void(0);' onclick='removeReply("+ comment_id +")'>[삭제]</a><br></div><hr>";
+                  }
+                  else{
+                    comment_html += "</div><hr class='my-2'>";
+                  }
+                }
+                $("#comments").html(comment_html);
+              }
+              else{
+                let comment_html = "<div>등록된 댓글이 없습니다.</div>";
+                $("#comments").html(comment_html);
+              }
+            }
+    );
+  }
 </script>
 </body>
 </html>

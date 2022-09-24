@@ -3,6 +3,7 @@ package Ver2.myBoard.domain;
 import Ver2.myBoard.member.dto.MemberRegisterDto;
 import Ver2.myBoard.member.dto.MemberUpdateDto;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@ToString
 @SequenceGenerator(
         name = "MEMBER_SEQ_GEN",
         sequenceName = "MEMBER_SEQ",

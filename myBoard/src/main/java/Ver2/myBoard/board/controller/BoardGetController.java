@@ -74,6 +74,7 @@ public class BoardGetController {
         BoardDetailDto boardDetailDto = new BoardDetailDto(findBoard.getId(), findBoard.getTitle(), findBoard.getContent(), findBoard.getWriter(), findBoard.getComments());
         model.addAttribute("board", boardDetailDto);
         model.addAttribute("memberId", member.getId());
+        model.addAttribute("memberNickname", member.getNickname());
 
         return "board/detailForm";
     }

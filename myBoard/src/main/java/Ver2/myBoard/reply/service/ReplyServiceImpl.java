@@ -43,6 +43,6 @@ public class ReplyServiceImpl implements ReplyService{
 
     @Override
     public void removeReply(Long id) {
-        //삭제는 나중에
+        replyRepository.removeReply(id);
     }
 }

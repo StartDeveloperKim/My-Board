@@ -2,12 +2,14 @@ package Ver2.myBoard.domain;
 
 import Ver2.myBoard.reply.dto.ReplyRegisterDto;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
+@ToString
 @SequenceGenerator(
         name = "REPLY_SEQ_GEN",
         sequenceName = "REPLY_SEQ",

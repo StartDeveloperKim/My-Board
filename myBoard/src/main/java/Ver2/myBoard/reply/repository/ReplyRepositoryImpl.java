@@ -13,6 +13,13 @@ public class ReplyRepositoryImpl implements ReplyRepository{
 
     private final EntityManager em;
 
+//    @Override
+//    public List<Reply> getReplyList(Long id) {
+//        return em.createQuery("select r from Reply r left join fetch r.member where r.board.id = :id order by r.regDate desc", Reply.class)
+//                .setParameter("id", id)
+//                .getResultList();
+//    }
+
     @Override
     public List<Reply> getReplyList(Long id) {
         return em.createQuery("select r from Reply r where r.board.id = :id order by r.regDate desc", Reply.class)
