@@ -3,6 +3,7 @@ package Ver2.myBoard.domain;
 import Ver2.myBoard.member.dto.MemberRegisterDto;
 import Ver2.myBoard.member.dto.MemberUpdateDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@ToString
+@NoArgsConstructor
 @SequenceGenerator(
         name = "MEMBER_SEQ_GEN",
         sequenceName = "MEMBER_SEQ",
@@ -45,19 +46,12 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Board> boards = new ArrayList<>(); // 한 회원이 작성한 글의 목록
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Reply> replies = new ArrayList<>();
-
     //==생성자==//
     public Member(String id, String password, String nickname, LocalDateTime createDate) {
         this.id = id;
         this.password = password;
         this.nickname = nickname;
         this.createDate = createDate;
-    }
-
-    public Member() {
-
     }
 
     //==생성 메서드==//

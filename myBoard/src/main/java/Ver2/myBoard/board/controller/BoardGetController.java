@@ -8,15 +8,13 @@ import Ver2.myBoard.domain.Member;
 import Ver2.myBoard.member.SessionConst;
 import Ver2.myBoard.member.dto.MemberLoginDto;
 import Ver2.myBoard.member.service.MemberService;
+import Ver2.myBoard.paging.PageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -34,9 +32,13 @@ public class BoardGetController {
     private final MemberService memberService;
 
     @GetMapping
-    public String boardForm(Model model) {
+    public String boardForm(@RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
+                            Model model) {
         // fetch join을 사용하면 쿼리에 대한 성능이 증가한다.
-        List<Board> boardList = boardService.getBoardList();
+        //List<Board> boardList = boardService.getBoardList();
+        PageDto pageDto = new PageDto(pageNum, boardService.getTotal());
+        List<Board> boardList = boardService.getBoardListWithPaging(pageNum);
+        log.info("Paging Info : {}", pageDto.toString());
 
         // Entity 객체를 직접 model에 담아서 보여주는 것은 옳지 못하다
         // 그래서 따로 DTO 객체를 만들고 이 값들을 초기화해서 넘겨준다.
@@ -46,6 +48,7 @@ public class BoardGetController {
                 .collect(Collectors.toList());
 
         model.addAttribute("boards", boards);
+        model.addAttribute("page", pageDto);
 
         return "board/listForm";
     }

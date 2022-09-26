@@ -25,6 +25,14 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public List<Board> findPaging(int start) {
+        return em.createQuery("select  b from Board b order by b.regDate desc", Board.class)
+                .setFirstResult(start)
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    @Override
     public Board findById(Long id) {
         return em.find(Board.class, id);
     }
@@ -37,5 +45,10 @@ public class BoardRepositoryImpl implements BoardRepository {
         em.createQuery("delete from Board b where b.id = :id")
                 .setParameter("id", id)
                 .executeUpdate();
+    }
+
+    @Override
+    public Long getCount() {
+        return em.createQuery("select count(b) from Board b", Long.class).getSingleResult();
     }
 }

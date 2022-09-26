@@ -60,6 +60,20 @@
             </tr>
             </tbody>
         </table>
+        <ul class="pagination" th:with="start=${page.startPage}, end=${page.endPage}">
+            <li class="page-item" th:if="${page.prev}"><a class="page-link" th:href="@{/board(pageNum=${page.pageNum}-1)}">이전</a></li>
+
+            <span th:each="num : ${#numbers.sequence(start, end)}">
+                <li class="page-item active" th:if="${num == page.pageNum && num!=0}">
+                    <a class="page-link" th:href="@{/board(pageNum=${num})}" th:text="${num}"></a>
+                </li>
+                <li class="page-item" th:if="${num != page.pageNum && num!=0}">
+                    <a class="page-link" th:href="@{/board(pageNum=${num})}" th:text="${num}"></a>
+                </li>
+            </span>
+
+            <li class="page-item" th:if="${page.next}"><a class="page-link" th:href="@{/board(pageNum=${page.pageNum}+1)}">다음</a></li>
+        </ul>
     </div>
 </div>
 </body>

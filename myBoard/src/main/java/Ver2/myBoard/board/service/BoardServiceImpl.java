@@ -6,6 +6,7 @@ import Ver2.myBoard.board.repository.BoardRepository;
 import Ver2.myBoard.domain.Board;
 import Ver2.myBoard.domain.Member;
 import Ver2.myBoard.member.repository.MemberRepository;
+import Ver2.myBoard.paging.PageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 // readOnly 설정은 select 쿼리에 있어서는 최적화가 일어난다.
 // 하지만 읽기 전용이기에 update, delete, insert 쿼리에는 따로 @Transactional 어노테이션을 붙여줘야한다.
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
@@ -36,6 +37,16 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public List<Board> getBoardList() {
         return boardRepository.findAll();
+    }
+
+    @Override
+    public List<Board> getBoardListWithPaging(int pageNum) {
+        return boardRepository.findPaging((pageNum - 1) * 10 + 1);
+    }
+
+    @Override
+    public Long getTotal() {
+        return boardRepository.getCount();
     }
 
     @Override
