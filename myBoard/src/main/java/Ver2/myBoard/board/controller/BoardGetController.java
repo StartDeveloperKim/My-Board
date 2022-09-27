@@ -38,7 +38,6 @@ public class BoardGetController {
         //List<Board> boardList = boardService.getBoardList();
         PageDto pageDto = new PageDto(pageNum, boardService.getTotal());
         List<Board> boardList = boardService.getBoardListWithPaging(pageNum);
-        log.info("Paging Info : {}", pageDto.toString());
 
         // Entity 객체를 직접 model에 담아서 보여주는 것은 옳지 못하다
         // 그래서 따로 DTO 객체를 만들고 이 값들을 초기화해서 넘겨준다.

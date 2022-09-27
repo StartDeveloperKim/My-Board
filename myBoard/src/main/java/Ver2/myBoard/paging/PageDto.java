@@ -1,5 +1,6 @@
 package Ver2.myBoard.paging;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
