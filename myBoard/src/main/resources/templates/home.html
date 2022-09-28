@@ -25,6 +25,7 @@
             <h3 class="text-black-50">환영합니다!!</h3>
             <form method="post" action="/logout">
                 <button type="submit" class="btn btn-lg btn-outline-danger">로그아웃</button>
+                <button type="button" class="btn btn-lg btn-outline-primary" th:onclick="|location.href='@{/users/{id}(id=${loginMember.id})}'|">마이페이지</button>
             </form>
             <hr class="my-3">
             <p><a class="btn btn-lg btn-outline-success" href="/board">게시판</a></p>

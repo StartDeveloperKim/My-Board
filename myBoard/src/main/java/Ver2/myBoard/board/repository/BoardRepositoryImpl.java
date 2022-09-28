@@ -38,6 +38,22 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public List<Board> findByMemberId(String id, int start) {
+        return em.createQuery("select b from Board b join fetch b.member where b.member.id = :id order by b.regDate desc", Board.class)
+                .setParameter("id", id)
+                .setFirstResult(start)
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    @Override
+    public Long getCountById(String id) {
+        return em.createQuery("select count(b) from Board b join b.member where b.member.id = :id", Long.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    @Override
     public void remove(Long id) {
         // EntityManager 에 remove 함수가 있지만 이는 Board 객체를 직접 전달해야한다.
         // 그러기 위해선 Board 객체를 받아와야하는 쿼리 한번, 그 다음 remove 를 위한 쿼리 한번이 나가야 하므로

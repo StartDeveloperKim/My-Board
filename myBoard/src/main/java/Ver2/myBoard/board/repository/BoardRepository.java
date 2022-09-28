@@ -16,6 +16,10 @@ public interface BoardRepository {
 
     public Board findById(Long id); // ID로 글 조회
 
+    public List<Board> findByMemberId(String id, int start);
+
+    public Long getCountById(String id);
+
     public void remove(Long id); // 글 삭제
 
     // 업데이트는 변경감지(dirty checking)기능으로 가능하기에 별도의 repository 함수가 필요없다.

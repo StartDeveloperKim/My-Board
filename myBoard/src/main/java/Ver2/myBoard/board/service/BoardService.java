@@ -18,6 +18,8 @@ public interface BoardService {
 
     public Long getTotal();
 
+    public Long getTotalById(String id);
+
     public Board getBoardById(Long id);
 
     public void updateBoard(Long id, BoardUpdateDto updateDto);

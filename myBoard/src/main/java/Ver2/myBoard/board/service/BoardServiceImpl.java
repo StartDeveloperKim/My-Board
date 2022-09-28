@@ -50,6 +50,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Long getTotalById(String id) {
+        return boardRepository.getCountById(id);
+    }
+
+    @Override
     public Board getBoardById(Long id) {
         return boardRepository.findById(id);
     }

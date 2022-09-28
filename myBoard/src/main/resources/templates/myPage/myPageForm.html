@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+        href="/resources/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/jumbotron-narrow.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <title th:text="${myPageInfo.nickname}+'님의 소개'">어서오세요</title>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+    <ul class="nav nav-pills pull-right">
+      <li><a href="/">홈 화면</a></li>
+    </ul>
+    <a href="/"><h3 class="text-muted">아무거나 게시판</h3></a>
+    </div>
+    <div class="jumbotron">
+        <h2><b th:text="${myPageInfo.nickname}"></b></h2>
+        <p th:text="'계정 생성일:' + ${myPageInfo.createTime}"></p>
+    </div>
+    <div id="board">
+
+    </div>
+
+</div>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        getBoardList();
+    });
+
+    function getBoardList() {
+        let memberId = [[${memberId}]];
+        let pageNum = 1;
+        $.getJSON(
+            '/users/board/' + memberId + "/" + pageNum,
+            function (data) {
+                console.log(data.total);
+                console.log(data.board);
+                if (data.total > 0) {
+                    let list = data.board;
+                    let board_html = "<table class='table table-striped'>\n" +
+                        "<thead>\n" +
+                        "            <tr>\n" +
+                        "                <th>번호</th>\n" +
+                        "                <th>제목</th>\n" +
+                        "                <th>작성자</th>\n" +
+                        "                <th>조회수</th>\n" +
+                        "                <th>등록일</th>\n" +
+                        "                <th>수정일</th>\n" +
+                        "            </tr>\n" +
+                        "            </thead>\n" +
+                        "            <tbody>\n";
+                    let paging_html = "<ul class='pagination'>";
+
+                    for (let i = 0; i < list.length; i++) {
+                        let id = list[i].id;
+                        let title = list[i].title;
+                        let nickname = list[i].nickname;
+                        let hit = list[i].hit;
+                        let regDate = list[i].regDate;
+                        let updateDate = list[i].updateDate;
+                        board_html += "<tr><td>" + id + "</td>";
+                        board_html += "<td>" + title + "</td>";
+                        board_html += "<td>" + nickname + "</td>";
+                        board_html += "<td>" + hit + "</td>";
+                        board_html += "<td>" + regDate + "</td>";
+                        board_html += "<td>" + updateDate + "</td></tr>";
+                    }
+                    board_html+="</tr></tbody></table>";
+                    $('#board').html(board_html);
+                } else {
+                    let board_html = "<div>등록된 게시글이 없습니다.</div>"
+                    $('#board').html(board_html);
+                }
+            }
+        );
+    }
+</script>
+</body>
+</html>
