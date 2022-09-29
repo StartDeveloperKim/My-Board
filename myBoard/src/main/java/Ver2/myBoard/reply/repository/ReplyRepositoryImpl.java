@@ -38,4 +38,11 @@ public class ReplyRepositoryImpl implements ReplyRepository{
                 .setParameter("id", id)
                 .executeUpdate();
     }
+
+    @Override
+    public void removeReplyByBoardId(Long id) {
+        em.createQuery("delete from Reply r where r.board.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
 }

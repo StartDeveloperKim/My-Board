@@ -12,4 +12,6 @@ public interface ReplyService {
     public void saveReply(ReplyRegisterDto replyRegisterDto);
 
     public void removeReply(Long id);
+
+    public void removeReplyByBoardId(Long id);
 }

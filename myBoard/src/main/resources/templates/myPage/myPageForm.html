@@ -7,6 +7,15 @@
     <link href="/css/jumbotron-narrow.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <title th:text="${myPageInfo.nickname}+'님의 소개'">어서오세요</title>
+    <style>
+        .line_limit{
+            width: 160px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -27,6 +36,7 @@
 </div>
 <script th:inline="javascript">
     $(document).ready(function () {
+        console.log("ready function")
         getBoardList();
     });
 
@@ -62,13 +72,13 @@
                         let regDate = list[i].regDate;
                         let updateDate = list[i].updateDate;
                         board_html += "<tr><td>" + id + "</td>";
-                        board_html += "<td>" + title + "</td>";
+                        board_html += "<td class='line_limit'><a href='/board/" + id + "'>" + title + "</a></td>";
                         board_html += "<td>" + nickname + "</td>";
                         board_html += "<td>" + hit + "</td>";
                         board_html += "<td>" + regDate + "</td>";
                         board_html += "<td>" + updateDate + "</td></tr>";
                     }
-                    board_html+="</tr></tbody></table>";
+                    board_html+="</tbody></table>";
                     $('#board').html(board_html);
                 } else {
                     let board_html = "<div>등록된 게시글이 없습니다.</div>"

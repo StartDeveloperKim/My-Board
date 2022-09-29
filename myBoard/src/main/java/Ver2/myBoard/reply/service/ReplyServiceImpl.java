@@ -45,4 +45,9 @@ public class ReplyServiceImpl implements ReplyService{
     public void removeReply(Long id) {
         replyRepository.removeReply(id);
     }
+
+    @Override
+    public void removeReplyByBoardId(Long id) {
+        replyRepository.removeReplyByBoardId(id);
+    }
 }

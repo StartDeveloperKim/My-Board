@@ -27,7 +27,7 @@ public class MyPageServiceImpl implements MyPageService{
     }
 
     public List<MyPageBoardDto> getMyPageBoard(String id, int pageNum) {
-        List<Board> board = boardRepository.findByMemberId(id, (pageNum - 1) * 10 + 1);
+        List<Board> board = boardRepository.findByMemberId(id, (pageNum - 1) * 10);
 
         return board.stream()
                 .map(MyPageBoardDto::new)

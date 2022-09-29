@@ -11,4 +11,6 @@ public interface ReplyRepository {
     public void insertReply(Reply reply);
 
     public void removeReply(Long id);
+
+    public void removeReplyByBoardId(Long id);
 }

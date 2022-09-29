@@ -7,6 +7,7 @@ import Ver2.myBoard.domain.Board;
 import Ver2.myBoard.domain.Member;
 import Ver2.myBoard.member.repository.MemberRepository;
 import Ver2.myBoard.paging.PageDto;
+import Ver2.myBoard.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final ReplyService replyService;
 
     @Override
     @Transactional
@@ -41,7 +43,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> getBoardListWithPaging(int pageNum) {
-        return boardRepository.findPaging((pageNum - 1) * 10 + 1);
+        return boardRepository.findPaging((pageNum - 1) * 10);
     }
 
     @Override
@@ -72,6 +74,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public void removeBoard(Long id) {
+        replyService.removeReplyByBoardId(id); // 댓글 삭제
         boardRepository.remove(id);
     }
 
