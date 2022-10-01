@@ -16,5 +16,7 @@ public class BoardDetailDto {
     private String title;
     private String content;
     private String writer;
+    private Long like;
+    private Long dislike;
     private List<Reply> comments = new ArrayList<>();
 }

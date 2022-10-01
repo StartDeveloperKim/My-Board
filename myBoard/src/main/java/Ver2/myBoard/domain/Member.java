@@ -46,6 +46,9 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Board> boards = new ArrayList<>(); // 한 회원이 작성한 글의 목록
 
+    @OneToMany(mappedBy = "member")
+    private List<Heart> hearts = new ArrayList<>();
+
     //==생성자==//
     public Member(String id, String password, String nickname, LocalDateTime createDate) {
         this.id = id;

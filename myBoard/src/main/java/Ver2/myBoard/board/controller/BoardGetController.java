@@ -73,9 +73,11 @@ public class BoardGetController {
             model.addAttribute("status", false);
         }
 
-        BoardDetailDto boardDetailDto = new BoardDetailDto(findBoard.getId(), findBoard.getTitle(), findBoard.getContent(), findBoard.getWriter(), findBoard.getComments());
+        BoardDetailDto boardDetailDto = new BoardDetailDto(findBoard.getId(), findBoard.getTitle(), findBoard.getContent(), findBoard.getWriter(),
+                findBoard.getGood(), findBoard.getBad(), findBoard.getComments());
         model.addAttribute("board", boardDetailDto);
         model.addAttribute("memberId", member.getId());
+        //model.addAttribute("memberPk", member.getMember_id());
         model.addAttribute("memberNickname", member.getNickname());
 
         return "board/detailForm";

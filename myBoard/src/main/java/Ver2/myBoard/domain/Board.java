@@ -4,6 +4,7 @@ import Ver2.myBoard.board.dto.BoardRegisterDto;
 import Ver2.myBoard.board.dto.BoardUpdateDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -53,9 +54,19 @@ public class Board {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private long good;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private long bad;
+
     @OneToMany(mappedBy = "board")
     private List<Reply> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board")
+    private List<Heart> hearts = new ArrayList<>();
 
     //==연관관계 편의 메서드==//
     public void setMember(Member member) {
@@ -97,5 +108,21 @@ public class Board {
 
     public void updateHit() {
         this.hit += 1;
+    }
+
+    public void addGood(){
+        this.good += 1;
+    }
+
+    public void removeGood(){
+        this.good -= 1;
+    }
+
+    public void addBad(){
+        this.bad += 1;
+    }
+
+    public void removeBad(){
+        this.bad -= 1;
     }
 }
