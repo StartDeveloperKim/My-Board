@@ -12,5 +12,5 @@ public interface HeartRepository {
     public Heart findByMemberIdAndBoardId(String memberId,  Long boardId, HeartStatus status);
     
     // 해당 객체를 삭제
-    public void remove(Heart heart);
+    public void remove(Long id);
 }

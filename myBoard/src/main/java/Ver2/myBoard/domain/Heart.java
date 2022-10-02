@@ -13,6 +13,7 @@ import javax.persistence.*;
         allocationSize = 1
 )
 @Getter
+@NoArgsConstructor
 public class Heart {
 
     @Id

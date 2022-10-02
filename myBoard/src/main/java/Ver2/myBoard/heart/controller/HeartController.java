@@ -1,5 +1,6 @@
 package Ver2.myBoard.heart.controller;
 
+import Ver2.myBoard.domain.Heart;
 import Ver2.myBoard.heart.dto.HeartRequestDto;
 import Ver2.myBoard.heart.service.HeartService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,12 @@ public class HeartController {
             // 좋아요(like), 싫어요(dislike), 좋아요 취소(removeLike), 싫어요 취소(removeDislike)
             log.info("HeartRequestDto {}", requestDto.toString());
             if (requestDto.getStatus().equals("like") || requestDto.getStatus().equals("dislike")) {
-                heartService.addHeart(requestDto);
+                Heart heart = heartService.findHeart(requestDto);
+                if (heart != null) {
+                    return "duplicate"; // 중복
+                } else {
+                    heartService.addHeart(requestDto);
+                }
             } else {
                 heartService.removeHeart(requestDto);
             }

@@ -37,7 +37,9 @@ public class HeartRepositoryImpl implements HeartRepository{
     }
 
     @Override
-    public void remove(Heart heart) {
-        em.remove(heart);
+    public void remove(Long id) {
+        em.createQuery("delete from Heart h where h.id=:id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

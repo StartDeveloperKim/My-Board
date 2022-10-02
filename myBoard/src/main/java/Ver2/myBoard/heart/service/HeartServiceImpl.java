@@ -54,7 +54,7 @@ public class HeartServiceImpl implements HeartService{
         Heart heart = heartRepository.findByMemberIdAndBoardId(requestDto.getMemberId(), requestDto.getBoardId(), heartStatus);
         log.info("heart {}, {}, {}", heart.getHeartStatus(), heart.getBoard().getId(), heart.getMember().getId());
         try {
-            heartRepository.remove(heart); // 추천을 삭제하고
+            heartRepository.remove(heart.getId()); // 추천을 삭제하고
             
             if (heartStatus == HeartStatus.GOOD) {
                 board.removeGood(); // 좋아요개수 1빼기
@@ -65,7 +65,13 @@ public class HeartServiceImpl implements HeartService{
             log.info("예외처리 {}", e.getMessage());
         }
     }
-    
+
+    @Override
+    public Heart findHeart(HeartRequestDto requestDto) {
+        return heartRepository.findByMemberIdAndBoardId(requestDto.getMemberId(), requestDto.getBoardId(),
+                bindingStatus(requestDto.getStatus()));
+    }
+
     // 문자열에 따라 상태
     private HeartStatus bindingStatus(String status) {
         if (status.equals("like") || status.equals("removeLike")) {
