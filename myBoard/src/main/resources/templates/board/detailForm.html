@@ -56,6 +56,10 @@
     <!--나중에 파일업로드 기능을 만들고 이를 image 태그로 보여줄 수 있도록 하자-->
     <textarea type="text" id="content" th:text="${board.content}" class="form-control"  rows="4" cols="120" readonly></textarea>
   </div>
+  <div>
+    <button type="button" id="likeBtn" class="btn btn-outline-primary">좋아요:<span id="likeCnt" th:text="${board.like}"></span></button>
+    <button type="button" id="disLikeBtn" class="btn btn-outline-danger">싫어요:<span id="dislikeCnt" th:text="${board.dislike}"></span></button>
+  </div>
   <a class="btn btn-outline-dark my-2" th:href="@{/board}">목록</a>
   <hr class="my-2">
   <div id="comment_count"></div>
@@ -107,6 +111,84 @@
   // 해당 문서가 켜지자마자 댓글리스트를 불러온다.
   $(document).ready(function () {
     getList();
+    recommendCheck();
+  });
+
+  $('#likeBtn').click(function () {
+    let status;
+    let btnClass = document.getElementById("likeBtn")
+    if (btnClass.classList.contains('btn-outline-primary')) {
+      status = "like";
+    } else {
+      status = "removeLike";
+    }
+    $.ajax({
+      type:'POST',
+      async:false,
+      url:'/heart',
+      data: JSON.stringify({
+        status : status,
+        memberId : [[${memberId}]],
+        boardId : [[${board.id}]]
+      }),
+      contentType: 'application/json',
+      success: function (data) {
+        console.log(status, data);
+        let result = data.result;
+        let likeCnt = data.likeCnt;
+        let dislikeCnt = data.dislikeCnt;
+
+        if (status==="like" && result==="success") {
+          document.getElementById("likeBtn").classList.replace('btn-outline-primary', 'btn-primary');
+        } else if (status==="removeLike" && result === "success") {
+          document.getElementById("likeBtn").classList.replace('btn-primary', 'btn-outline-primary');
+        } else{
+          alert("오류발생!!!");
+        }
+
+        document.getElementById('likeCnt').textContent = likeCnt;
+        document.getElementById('dislikeCnt').textContent = dislikeCnt;
+      },
+    });
+  });
+
+  $('#disLikeBtn').click(function () {
+    let status;
+    let btnClass = document.getElementById("disLikeBtn")
+    if (btnClass.classList.contains('btn-outline-danger')) {
+      status = "dislike";
+    } else {
+      status="removeDislike";
+    }
+
+    $.ajax({
+      type: 'POST',
+      async: false,
+      url: '/heart',
+      data: JSON.stringify({
+        status: status,
+        memberId: [[${memberId}]],
+        boardId: [[${board.id}]]
+      }),
+      contentType: 'application/json',
+      success: function (data) {
+        console.log(status, data);
+        let result = data.result;
+        let likeCnt = data.likeCnt;
+        let dislikeCnt = data.dislikeCnt;
+        
+        if (status==="dislike" && result === "success") {
+          document.getElementById("disLikeBtn").classList.replace('btn-outline-danger', 'btn-danger');
+        } else if (status==="removeDislike" && result === "success") {
+          document.getElementById("disLikeBtn").classList.replace('btn-danger', 'btn-outline-danger');
+        } else {
+          alert("오류발생!!!");
+        }
+
+        document.getElementById('likeCnt').textContent = likeCnt;
+        document.getElementById('dislikeCnt').textContent = dislikeCnt;
+      },
+    });
   });
 
   // 댓글등록 버튼을 누르면 아래의 스펙으로 AJAX 통신을 실시
@@ -144,6 +226,40 @@
       $('#commentBody').focus();
     }
   });
+
+  function recommendCheck() {
+    let memberId = [[${memberId}]];
+    let boardId = [[${board.id}]];
+    let likeBtn = document.getElementById("likeBtn");
+    let dislikeBtn = document.getElementById("disLikeBtn");
+
+    $.ajax({
+      type:'GET',
+      async:false,
+      url:'/heart/check/' + memberId + '/' + boardId,
+      success: function (result) {
+        console.log(result);
+        let likeCnt = result.likeCnt;
+        let dislikeCnt = result.dislikeCnt;
+        let status = result.status;
+
+        if (status === "like existence") {
+          likeBtn.classList.replace('btn-outline-primary', 'btn-primary');
+        }else if (status === "dislike existence") {
+          dislikeBtn.classList.replace('btn-outline-danger', 'btn-danger');
+        }else if (status === "double existence") {
+          likeBtn.classList.replace('btn-outline-primary', 'btn-primary');
+          dislikeBtn.classList.replace('btn-outline-danger', 'btn-danger');
+        }
+
+        document.getElementById('likeCnt').textContent = likeCnt;
+        document.getElementById('dislikeCnt').textContent = dislikeCnt;
+      },
+      error: function () {
+        alert('통신실패');
+      },
+    });
+  }
 
   // 댓글리스트를 불러온다.
   function getList() {

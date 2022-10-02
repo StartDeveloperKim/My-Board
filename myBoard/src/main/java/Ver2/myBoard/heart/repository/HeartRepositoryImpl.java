@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class HeartRepositoryImpl implements HeartRepository{
     }
 
     @Override
-    public Heart findByMemberIdAndBoardId(String memberId,  Long boardId, HeartStatus status) {
+    public Heart findByMemberIdAndBoardIdAndStatus(String memberId, Long boardId, HeartStatus status) {
         try {
             return em.createQuery("select h from Heart h where h.member.id=:memberId and " +
                             "h.board.id=:boardId and h.heartStatus=:status", Heart.class)
@@ -41,5 +42,13 @@ public class HeartRepositoryImpl implements HeartRepository{
         em.createQuery("delete from Heart h where h.id=:id")
                 .setParameter("id", id)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<Heart> findByMemberIdAndBoardId(String memberId, Long boardId) {
+        return em.createQuery("select h from Heart h where h.member.id=:memberId and h.board.id=:boardId", Heart.class)
+                .setParameter("memberId", memberId)
+                .setParameter("boardId", boardId)
+                .getResultList();
     }
 }

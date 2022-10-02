@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.ref.ReferenceQueue;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +51,7 @@ public class HeartServiceImpl implements HeartService{
         HeartStatus heartStatus = bindingStatus(requestDto.getStatus()); // 상태결정
         Board board = boardRepository.findById(requestDto.getBoardId());
 
-        Heart heart = heartRepository.findByMemberIdAndBoardId(requestDto.getMemberId(), requestDto.getBoardId(), heartStatus);
+        Heart heart = heartRepository.findByMemberIdAndBoardIdAndStatus(requestDto.getMemberId(), requestDto.getBoardId(), heartStatus);
         log.info("heart {}, {}, {}", heart.getHeartStatus(), heart.getBoard().getId(), heart.getMember().getId());
         try {
             heartRepository.remove(heart.getId()); // 추천을 삭제하고
@@ -67,9 +67,16 @@ public class HeartServiceImpl implements HeartService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Heart findHeart(HeartRequestDto requestDto) {
-        return heartRepository.findByMemberIdAndBoardId(requestDto.getMemberId(), requestDto.getBoardId(),
+        return heartRepository.findByMemberIdAndBoardIdAndStatus(requestDto.getMemberId(), requestDto.getBoardId(),
                 bindingStatus(requestDto.getStatus()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Heart> findHeartById(String memberId, Long boardId) {
+        return heartRepository.findByMemberIdAndBoardId(memberId, boardId);
     }
 
     // 문자열에 따라 상태
