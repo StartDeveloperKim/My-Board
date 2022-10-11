@@ -1,7 +1,6 @@
 # My-Board
 
 <게시판에 구현된 기능>
-<hr>
 1. 게시판 
  1) 글 등록
  2) 글 수정 및 삭제
@@ -9,7 +8,6 @@
  4) 좋아요 및 싫어요
  5) 댓글
 
-<hr>
 2. 회원
  1) 회원가입
  ![image](https://user-images.githubusercontent.com/97887047/195047334-81f5c21e-0b03-47f1-9de8-01cce01e263e.png)
