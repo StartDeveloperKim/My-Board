@@ -19,4 +19,6 @@ public interface MemberService {
     public boolean checkId(String id);
 
     public boolean loginCheck(MemberLoginDto loginDto, BindingResult bindingResult);
+
+    public boolean registerCheck(MemberRegisterDto registerDto);
 }

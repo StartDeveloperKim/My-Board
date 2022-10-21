@@ -61,4 +61,10 @@ public class MemberServiceImpl implements MemberService{
             }
         }
     }
+
+    @Override
+    public boolean registerCheck(MemberRegisterDto registerDto) {
+        Member member = memberRepository.findById(registerDto.getId());
+        return member == null;
+    }
 }
